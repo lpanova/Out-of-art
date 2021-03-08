@@ -66,7 +66,7 @@ function CreatePaint(props) {
         description,
         author,
         fileImage: {
-          type: 'KinveyFile',
+          _type: 'KinveyFile',
           _id: id
         }
       })
@@ -117,8 +117,6 @@ function CreatePaint(props) {
                 className="form-input"
                 accept=".jpg, .jpeg, .png"
               />
-              <input type="submit" value="Upload" className="form-button" />
-
               <div>Name:</div>
               <input
                 type="text"
@@ -135,6 +133,7 @@ function CreatePaint(props) {
                 rows="6"
                 className="form-input"
               />
+              <input type="submit" value="Submit" className="form-button" />
             </form>
           </div>
         </div>
