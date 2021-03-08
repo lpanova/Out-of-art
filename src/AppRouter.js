@@ -5,6 +5,7 @@ import Paints from './components/Paints';
 import Login from './components/Login';
 import Register from './components/Register';
 import CreatePaint from './components/CreatePaint';
+import MyPaints from './components/MyPaints';
 
 function AppRouter(props) {
   return (
@@ -13,6 +14,7 @@ function AppRouter(props) {
         <Route exact path="/" component={Home} />
         <Route exact path="/home" component={Home} />
         <Route exact path="/paints" component={Paints} />
+        <Route exact path="/mypaints" component={MyPaints} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/create" component={CreatePaint} />

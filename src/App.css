@@ -22,9 +22,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top:2em;
 }
 
 .loader{
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
 }
