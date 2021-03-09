@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../App.css';
 import '../css/Form.css';
 
 function CreatePaint(props) {
@@ -103,20 +104,25 @@ function CreatePaint(props) {
   return (
     <div>
       <div>
-        <div className=" full-screen">
-          <div className="mt-6">
-            <h5 className="login-text">Upload</h5>
+        <div>
+          <div>
+            <h3 className="text-center">Create Paint</h3>
           </div>
-          <div className=" flex-x-center full-screen">
-            <form className="mt-6 form" onSubmit={handleSubmit}>
-              <div>Upload file:</div>
-              <input
-                type="file"
-                name="file"
-                onChange={handleFileChange}
-                className="form-input"
-                accept=".jpg, .jpeg, .png"
-              />
+          <div className=" flex-x-center">
+            <form className="form" onSubmit={handleSubmit}>
+              <div className="flex-x-center">
+                <div className="wrapper-input">
+                  <div className="text-center m1">Upload file:</div>
+                  <input
+                    type="file"
+                    name="file"
+                    onChange={handleFileChange}
+                    accept=".jpg, .jpeg, .png"
+                    className="formelement wrapper-input"
+                  />
+                </div>
+              </div>
+
               <div>Name:</div>
               <input
                 type="text"

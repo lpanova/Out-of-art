@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.flex-x-center {
+  display: flex;
+  justify-content: center;
+}
+
 .flex-wrap{
   display: flex;
   flex-wrap: wrap;
@@ -11,10 +16,21 @@
   font-style: italic;
 }
 
+.text-center{
+  text-align: center;
+}
+
 .name {
   margin: 0.3em;
   text-align: center;
 }
+
+.m1{
+  margin: 1em;
+}
+
+
+/*Loading */
 
 .wrapper-loader {
   width: 100%;
