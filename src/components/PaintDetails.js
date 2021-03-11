@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../App.css';
+import '../css/Paint.css';
 import Loading from './Loading';
 
 function PaintDetails(props) {
@@ -12,10 +14,16 @@ function PaintDetails(props) {
 
   const [loading, setLoading] = useState(true);
 
+  const [edit, setEdit] = useState(false);
+
+  const user = localStorage.username;
+  console.log(user);
+
   const kinveyAppKey = 'kid_S13nVzcMO';
   const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
   const id = props.match.params.id;
   console.log(id);
+
   function details(kinveyAppKey, authToken, id) {
     return fetch(
       `https://baas.kinvey.com/appdata/${kinveyAppKey}/Paints/${id}`,
@@ -39,6 +47,10 @@ function PaintDetails(props) {
     console.log(resp1json);
     setPaintDetails(resp1json);
     setLoading(false);
+
+    if (user === resp1json.author) {
+      setEdit(true);
+    }
   }
 
   useEffect(() => {
@@ -54,13 +66,13 @@ function PaintDetails(props) {
         <div className="img-details">
           <img
             src={paintDetails.fileImage._downloadURL}
+            alt="paint"
             className="paint-img"
           />
         </div>
-
         <div className="text-details">
           <div>
-            <p>{paintDetails.name}</p>
+            <h3>{paintDetails.name}</h3>
           </div>
           <div>
             <label>Description:</label>
@@ -71,6 +83,17 @@ function PaintDetails(props) {
             <div>{paintDetails.author}</div>
           </div>
         </div>
+        {edit ? (
+          <div>
+            {
+              <Link className="button" to={`/edit/${id}`}>
+                Edit
+              </Link>
+            }
+          </div>
+        ) : (
+          <div></div>
+        )}
       </article>
     </div>
   );

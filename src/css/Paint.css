@@ -48,10 +48,11 @@
     font-style: italic;
     margin-right: 0.3em;
   }
+  .text-details h3{
+    margin: 0.1em 0em 0.3em 0em; 
+}
 
   .text-details p{
-      font-size: 1.5em;
-      font-weight: bold; 
       margin: 0.1em 0em 0.1em 0em; 
   }
 
@@ -69,4 +70,3 @@
   width: 100%;
   height: inherit;
 }
-   

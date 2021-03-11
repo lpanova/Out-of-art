@@ -7,6 +7,7 @@ import Register from './components/Register';
 import CreatePaint from './components/CreatePaint';
 import MyPaints from './components/MyPaints';
 import PaintDetails from './components/PaintDetails';
+import EditPaint from './components/EditPaint';
 
 function AppRouter(props) {
   return (
@@ -19,7 +20,8 @@ function AppRouter(props) {
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/create" component={CreatePaint} />
-        <Route exact path="/paint/details/:id" component={PaintDetails} />
+        <Route exact path="/details/:id" component={PaintDetails} />
+        <Route exact path="/edit/:id" component={EditPaint} />
       </Switch>
     </div>
   );

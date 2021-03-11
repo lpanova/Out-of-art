@@ -8,11 +8,27 @@
     text-align: left;
     color: fff;
     background-color: white;
+    background-image: url('green.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
 
   }
-  
-  .form {
+
+  .wrapper-form > div{
+    position: absolute;
     width: 40%;
+    height: 70%;
+  }
+
+  @media (max-width: 700px) {
+    .wrapper-form >div {
+      width: 100%;
+    }
+  }
+
+  .form {
+    width: 100%;
     height: max-content;
     padding: 1em;
     margin: 0.5em;
@@ -32,15 +48,15 @@
   
   @media (max-width: 700px) {
     .form, .form-contact {
-      width: 100%;
+      width: 90%;
     }
   }
   
-  .img-form {
-    width: 100px;
+  .form  img{
+    width: 60px;
   }
-  
-  .form-input {
+
+  .form input[type="text" ]{
     width: 100%;
     background: transparent;
     border: none;
@@ -50,8 +66,12 @@
   }
   
   
-  .form-input:focus {
+  form input[type="text" ]:focus {
     outline: none;
+  }
+
+  form label {
+    font-weight: bold;
   }
   
   .form-button {

@@ -6,19 +6,23 @@ import '../css/Paint.css';
 function Paint(props) {
   return (
     <div className="paint">
-      <Link to={`/paint/details/${props._id}`}>
+      <Link to={`/details/${props._id}`}>
         <article>
           <div className="img-paint">
-            <img src={props.fileImage._downloadURL} className="paint-img" />
+            <img
+              src={props.fileImage._downloadURL}
+              className="paint-img"
+              alt="paint"
+            />
           </div>
           <div>
             <div className="text-details">
               <div>
-                <p>{props.name}</p>
+                <h3>{props.name}</h3>
               </div>
               <div>
                 <label>Author:</label>
-                <div>{props.author}</div>
+                <p>{props.author}</p>
               </div>
             </div>
           </div>

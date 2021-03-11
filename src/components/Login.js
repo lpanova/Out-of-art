@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
+import LoginIcon from '../login-icon.svg';
 
 function Login(props) {
   const { login } = useContext(userAuthContext);
@@ -22,34 +23,25 @@ function Login(props) {
   return (
     <div>
       <div className="wrapper-form">
-        <div className=" full-screen">
-          <div className="mt-6">
-            <h5 className="login-text">Login</h5>
+        <div>
+          <div className="text-center">
+            <h5>Login</h5>
           </div>
-          <div className=" flex-x-center full-screen">
-            <form onSubmit={handleSubmit} className="mt-6 form">
-              <div>
-                <div>Username</div>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  name="username"
-                  className="form-input"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="form">
+            <div className="flex-x-center">
+              <img src={LoginIcon} alt="login icon" />
+            </div>
+            <div>
+              <label>Username</label>
+              <input onChange={handleChange} type="text" name="username" />
+            </div>
 
-              <div>
-                <div>Password</div>
-                <input
-                  onChange={handleChange}
-                  type="text"
-                  name="password"
-                  className="form-input"
-                />
-              </div>
-              <input type="submit" value="Add" className="form-button" />
-            </form>
-          </div>
+            <div>
+              <label>Password</label>
+              <input onChange={handleChange} type="text" name="password" />
+            </div>
+            <input type="submit" value="Add" className="form-button" />
+          </form>
         </div>
       </div>
     </div>
