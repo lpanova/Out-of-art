@@ -25,7 +25,7 @@ function Login(props) {
       <div className="wrapper-form">
         <div>
           <div className="text-center">
-            <h5>Login</h5>
+            <h3>Login</h3>
           </div>
           <form onSubmit={handleSubmit} className="form">
             <div className="flex-x-center">

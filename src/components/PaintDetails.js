@@ -21,8 +21,12 @@ function PaintDetails(props) {
   const user = localStorage.username;
   const history = useHistory();
   const kinveyAppKey = 'kid_S13nVzcMO';
-  const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
+  // const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
   const id = props.match.params.id;
+  const masterSecret = '106c25cc949a4de5b11db3a921b3f3cb';
+  const authToken = localStorage.getItem('authtoken')
+    ? 'Kinvey ' + localStorage.getItem('authtoken')
+    : 'Basic ' + btoa(kinveyAppKey + ':' + masterSecret);
 
   function details(kinveyAppKey, authToken, id) {
     return fetch(

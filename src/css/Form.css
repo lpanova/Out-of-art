@@ -21,9 +21,16 @@
     height: 70%;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 1050px) and (min-width: 700px) {
     .wrapper-form >div {
+      width: 70%;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .wrapper-form >div{
       width: 100%;
+      height: 100%;
     }
   }
 
@@ -42,18 +49,22 @@
 
   @media (max-width: 1050px) and (min-width: 700px) {
     .form {
-      width: 70%;
+      width: 100%;
     }
   }
   
   @media (max-width: 700px) {
     .form, .form-contact {
-      width: 90%;
+      width: 94%;
     }
   }
   
   .form  img{
     width: 60px;
+  }
+
+  .form  div{
+    margin-top:1em
   }
 
   .form input[type="text" ]{
@@ -62,7 +73,9 @@
     border: none;
     border-bottom: 1px solid black;
     margin-bottom: 0.5em;
+    margin-top:  0.5em;
     color: black;
+    padding: 0px;
   }
   
   
@@ -81,9 +94,9 @@
     justify-content: center;
     align-items: center;
     border: none;
-    margin: 0.3em 0em 0.3em 0em;
+    margin: 3em 0em 0.3em 0em;
     border-radius: 2px;
-    background: #353535;
+    background: #000;
     color: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -91,7 +104,7 @@
   
   .form-button:hover {
     cursor: pointer;
-    background-color: black;
+    background-color: #363636;
     color:#cddc39;
   }
   

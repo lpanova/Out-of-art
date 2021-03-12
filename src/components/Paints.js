@@ -9,7 +9,10 @@ function Paints() {
   const [loading, setLoading] = useState(true);
 
   const kinveyAppKey = 'kid_S13nVzcMO';
-  const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
+  const masterSecret = '106c25cc949a4de5b11db3a921b3f3cb';
+  const authToken = localStorage.getItem('authtoken')
+    ? 'Kinvey ' + localStorage.getItem('authtoken')
+    : 'Basic ' + btoa(kinveyAppKey + ':' + masterSecret);
 
   function getPaintsData(kinveyAppKey, authToken) {
     return fetch(`https://baas.kinvey.com/appdata/${kinveyAppKey}/Paints`, {

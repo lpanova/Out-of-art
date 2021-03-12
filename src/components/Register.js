@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
+import RegisterIcon from '../register-icon.svg';
 
 function Register(props) {
   const { register } = useContext(userAuthContext);
@@ -40,12 +41,15 @@ function Register(props) {
   return (
     <div>
       <div className="wrapper-form">
-        <div className=" full-screen">
-          <div className="mt-6">
-            <h5 className="login-text">Register</h5>
+        <div>
+          <div>
+            <h3 className="text-center">Register</h3>
           </div>
-          <div className=" flex-x-center full-screen">
-            <form onSubmit={handleSubmit} className="mt-6 form">
+          <div className=" flex-x-center">
+            <form onSubmit={handleSubmit} className="form">
+              <div className="flex-x-center">
+                <img src={RegisterIcon} alt="login" />
+              </div>
               <div>
                 <div>Username</div>
                 <input
