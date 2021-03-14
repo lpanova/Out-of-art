@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import Loading from './Loading.js';
 import Paint from './Paint';
+import { getAuthenticationToken } from '../utils/kinvey';
+import { editOnlyPaint } from '../utils/api';
 
 function MyPaints() {
   const [myPaints, setMyPaints] = useState([]);
@@ -38,8 +40,23 @@ function MyPaints() {
     setLoading(false);
   }
 
+  async function updateLike(data) {
+    const resp1 = await editOnlyPaint(
+      kinveyAppKey,
+      getAuthenticationToken(),
+      data
+    );
+
+    if (!resp1.ok) {
+      throw new Error('cannot write in paint collection');
+    }
+
+    await GetMyPaints(kinveyAppKey, authToken);
+  }
+
   useEffect(() => {
     GetMyPaints();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -49,8 +66,8 @@ function MyPaints() {
     <div>
       <p className="name">Paints</p>
       <div className="flex-x flex-wrap">
-        {myPaints.map((item, index) => (
-          <Paint key={item._id} index={index} {...item} />
+        {myPaints.map((item) => (
+          <Paint key={item._id} item={{ ...item }} updateLike={updateLike} />
         ))}
       </div>
     </div>

@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import '../App.css';
 import '../css/Form.css';
 
-function CreatePaint(props) {
+function CreatePaint() {
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const author = localStorage.getItem('username');
+  const [likes] = useState(['like']);
 
   const kinveyAppKey = 'kid_S13nVzcMO';
   const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
@@ -66,6 +67,7 @@ function CreatePaint(props) {
         name,
         description,
         author,
+        likes,
         fileImage: {
           _type: 'KinveyFile',
           _id: id

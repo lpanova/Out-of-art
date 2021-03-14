@@ -4,56 +4,64 @@ import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Paint.css';
 import Loading from './Loading';
+import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
+import { editOnlyPaint, getPaint } from '../utils/api';
 
 function PaintDetails(props) {
   const [paintDetails, setPaintDetails] = useState({
     url: '',
     name: '',
     description: '',
-    author: ''
+    author: '',
+    likes: []
   });
   const [fileId, setFileId] = useState('');
-
   const [loading, setLoading] = useState(true);
-
   const [edit, setEdit] = useState(false);
-
-  const user = localStorage.username;
+  const username = localStorage.username;
   const history = useHistory();
-  const kinveyAppKey = 'kid_S13nVzcMO';
-  // const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
   const id = props.match.params.id;
-  const masterSecret = '106c25cc949a4de5b11db3a921b3f3cb';
-  const authToken = localStorage.getItem('authtoken')
-    ? 'Kinvey ' + localStorage.getItem('authtoken')
-    : 'Basic ' + btoa(kinveyAppKey + ':' + masterSecret);
+  const isLiked = paintDetails.likes.indexOf(username) !== -1;
+  let likesNumber = paintDetails.likes.length - 1;
 
-  function details(kinveyAppKey, authToken, id) {
-    return fetch(
-      `https://baas.kinvey.com/appdata/${kinveyAppKey}/Paints/${id}`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          Authorization: authToken,
-          'Content-Type': 'application/json'
-        }
-      }
+  async function updateLike(data) {
+    const resp1 = await editOnlyPaint(
+      kinveyAppKey,
+      getAuthenticationToken(),
+      data
     );
+
+    if (!resp1.ok) {
+      throw new Error('cannot write in paint collection');
+    }
+
+    await getDetailPaint();
   }
+
+  async function HandleClick() {
+    const newItem = { ...paintDetails };
+    if (isLiked) {
+      newItem.likes = paintDetails.likes.filter((e) => e !== username);
+    } else {
+      newItem.likes = paintDetails.likes.concat([username]);
+    }
+
+    await updateLike(newItem);
+  }
+
   async function getDetailPaint() {
-    const resp1 = await details(kinveyAppKey, authToken, id);
+    const resp1 = await getPaint(kinveyAppKey, getAuthenticationToken(), id);
     if (!resp1.ok) {
       throw new Error('cannot get paintsData');
     }
 
     const resp1json = await resp1.json();
-    console.log(resp1json);
+    // console.log(resp1json);
     setPaintDetails(resp1json);
     setFileId(resp1json.fileImage._id);
     setLoading(false);
 
-    if (user === resp1json.author) {
+    if (username === resp1json.author) {
       setEdit(true);
     }
   }
@@ -77,7 +85,7 @@ function PaintDetails(props) {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
-        Authorization: authToken,
+        Authorization: getAuthenticationToken(),
         'Content-Type': 'application/json'
       }
     });
@@ -89,7 +97,11 @@ function PaintDetails(props) {
       throw new Error('cannot get paintsData');
     }
 
-    const resp2 = await delPainObject(kinveyAppKey, authToken, id);
+    const resp2 = await delPainObject(
+      kinveyAppKey,
+      getAuthenticationToken(),
+      id
+    );
     if (!resp2.ok) {
       throw new Error('cannot get paintsData');
     }
@@ -99,6 +111,7 @@ function PaintDetails(props) {
 
   useEffect(() => {
     getDetailPaint();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -126,6 +139,8 @@ function PaintDetails(props) {
             <label>Author:</label>
             <div>{paintDetails.author}</div>
           </div>
+          <button onClick={HandleClick}>{isLiked ? 'Unlike' : 'Like'}</button>
+          <div>Likes: {likesNumber}</div>
         </div>
         {edit ? (
           <div>

@@ -6,6 +6,7 @@ function EditPaint(props) {
   const [description, setDescription] = useState('');
   const author = localStorage.getItem('username');
   const [fileId, setFileId] = useState('');
+  const [likes, setLikes] = useState([]);
   const [fileImage, setfileImage] = useState({
     _id: '',
     _filename: '',
@@ -49,6 +50,7 @@ function EditPaint(props) {
     console.log(resp1json);
     setName(resp1json.name);
     setDescription(resp1json.description);
+    setLikes(resp1json.likes);
     setFileId(resp1json.fileImage._id);
     setfileImage({
       _id: resp1json.fileImage._id,
@@ -70,6 +72,7 @@ function EditPaint(props) {
   }
   useEffect(() => {
     getPaint();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //function handleChange()
@@ -129,6 +132,7 @@ function EditPaint(props) {
           name,
           description,
           author,
+          likes,
           fileImage: {
             _type: 'KinveyFile',
             _id: id
@@ -152,6 +156,7 @@ function EditPaint(props) {
           name,
           description,
           author,
+          likes,
           fileImage
         })
       }

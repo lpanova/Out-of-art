@@ -3,14 +3,31 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import '../css/Paint.css';
 
-function Paint(props) {
+function Paint({ item, updateLike }) {
+  const username = localStorage.getItem('username');
+  const isLiked = item.likes.indexOf(username) !== -1;
+  console.log(item, updateLike);
+
+  let likesNumber = item.likes.length - 1;
+
+  async function HandleClick() {
+    const newItem = { ...item };
+    if (isLiked) {
+      newItem.likes = item.likes.filter((e) => e !== username);
+    } else {
+      newItem.likes = item.likes.concat([username]);
+    }
+
+    await updateLike(newItem);
+  }
+
   return (
     <div className="paint">
-      <Link to={`/details/${props._id}`}>
+      <Link to={`/details/${item._id}`}>
         <article>
           <div className="img-paint">
             <img
-              src={props.fileImage._downloadURL}
+              src={item.fileImage._downloadURL}
               className="paint-img"
               alt="paint"
             />
@@ -18,16 +35,18 @@ function Paint(props) {
           <div>
             <div className="text-details">
               <div>
-                <h3>{props.name}</h3>
+                <h3>{item.name}</h3>
               </div>
               <div>
                 <label>Author:</label>
-                <p>{props.author}</p>
+                <p>{item.author}</p>
               </div>
             </div>
           </div>
         </article>
       </Link>
+      <button onClick={HandleClick}>{isLiked ? 'Unlike' : 'Like'}</button>
+      <div>Likes: {likesNumber}</div>
     </div>
   );
 }
