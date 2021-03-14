@@ -1,5 +1,10 @@
 import React, { createContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import {
+  getAuthenticationToken,
+  kinveyAppKey,
+  basicAuth
+} from '../utils/kinvey';
 
 export const userAuthContext = createContext();
 
@@ -10,12 +15,8 @@ function UserAuthentication(props) {
     username: localStorage.getItem('username')
   });
 
-  const kinveyAppKey = 'kid_S13nVzcMO';
-  const kinveyAppSecret = '35a963b58b3b44318e6556f9a84d7b0c';
-  const basicAuth = 'Basic ' + btoa(kinveyAppKey + ':' + kinveyAppSecret);
-
   const register = (inputs) => {
-    fetch('https://baas.kinvey.com/user/kid_S13nVzcMO', {
+    fetch(`https://baas.kinvey.com/user/${kinveyAppKey}`, {
       method: 'POST',
       Host: 'baas.kinvey.com',
       headers: {
@@ -45,7 +46,7 @@ function UserAuthentication(props) {
   };
 
   const login = (inputs) => {
-    fetch('https://baas.kinvey.com/user/kid_S13nVzcMO/login', {
+    fetch(`https://baas.kinvey.com/user/${kinveyAppKey}/login`, {
       method: 'POST',
       Host: 'baas.kinvey.com',
       headers: {
@@ -75,14 +76,12 @@ function UserAuthentication(props) {
   };
 
   const logout = () => {
-    const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
-
-    fetch('https://baas.kinvey.com/user/kid_S13nVzcMO/_logout', {
+    fetch(`https://baas.kinvey.com/user/${kinveyAppKey}/_logout`, {
       method: 'POST',
       Host: 'baas.kinvey.com',
       headers: {
         Accept: 'application/json',
-        Authorization: authToken,
+        Authorization: getAuthenticationToken(),
         'Content-Type': 'application/json'
       }
     })

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
+import { getPaint } from '../utils/api';
 
 function EditPaint(props) {
   const [file, setFile] = useState(null);
@@ -23,26 +25,10 @@ function EditPaint(props) {
     _type: ''
   });
 
-  const kinveyAppKey = 'kid_S13nVzcMO';
-  const authToken = 'Kinvey ' + localStorage.getItem('authtoken');
   const id = props.match.params.id;
 
-  //function get
-  function paint(kinveyAppKey, authToken, id) {
-    return fetch(
-      `https://baas.kinvey.com/appdata/${kinveyAppKey}/Paints/${id}`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          Authorization: authToken,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-  }
-  async function getPaint() {
-    const resp1 = await paint(kinveyAppKey, authToken, id);
+  async function getPaintInfo() {
+    const resp1 = await getPaint(kinveyAppKey, getAuthenticationToken(), id);
     if (!resp1.ok) {
       throw new Error('cannot get paintsData');
     }
@@ -71,11 +57,10 @@ function EditPaint(props) {
     console.log(fileId);
   }
   useEffect(() => {
-    getPaint();
+    getPaintInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //function handleChange()
   function handleFileChange(event) {
     setFile(event.target.files[0]);
   }
@@ -86,7 +71,6 @@ function EditPaint(props) {
     setDescription(event.target.value);
   }
 
-  //function handleSubmit()
   function createMetadata(metadata, appKey, authToken) {
     return fetch(`https://baas.kinvey.com/blob/${appKey}/${fileId}`, {
       method: 'PUT',
@@ -167,7 +151,11 @@ function EditPaint(props) {
     event.preventDefault();
 
     if (file === null) {
-      const resp3 = await editOnlyPaint(id, kinveyAppKey, authToken);
+      const resp3 = await editOnlyPaint(
+        props.match.params.id,
+        kinveyAppKey,
+        getAuthenticationToken()
+      );
       if (!resp3.ok) {
         throw new Error('cannot write in paint collection');
       }
@@ -178,7 +166,11 @@ function EditPaint(props) {
         _public: true
       };
 
-      const resp1 = await createMetadata(metadata, kinveyAppKey, authToken);
+      const resp1 = await createMetadata(
+        metadata,
+        kinveyAppKey,
+        getAuthenticationToken()
+      );
       if (!resp1.ok) {
         throw new Error('cannot write metadata');
       }
@@ -190,7 +182,11 @@ function EditPaint(props) {
         'Content-Type': metadata.mimeType
       });
 
-      const resp3 = await editPaint(resp1json._id, kinveyAppKey, authToken);
+      const resp3 = await editPaint(
+        resp1json._id,
+        kinveyAppKey,
+        getAuthenticationToken()
+      );
       if (!resp3.ok) {
         throw new Error('cannot write in paint collection');
       }
