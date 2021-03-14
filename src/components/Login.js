@@ -40,7 +40,7 @@ function Login(props) {
               <label>Password</label>
               <input onChange={handleChange} type="text" name="password" />
             </div>
-            <input type="submit" value="Add" className="form-button" />
+            <input type="submit" value="Login" className="form-button" />
           </form>
         </div>
       </div>

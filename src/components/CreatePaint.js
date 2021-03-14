@@ -105,45 +105,44 @@ function CreatePaint() {
 
   return (
     <div>
-      <div>
+      <div className="wrapper-form">
         <div>
-          <div>
-            <h3 className="text-center">Create Paint</h3>
+          <div className="text-center">
+            <h3>Create Paint</h3>
           </div>
-          <div className=" flex-x-center">
-            <form className="form" onSubmit={handleSubmit}>
-              <div className="flex-x-center">
-                <div className="wrapper-input">
-                  <div className="text-center m1">Upload file:</div>
-                  <input
-                    type="file"
-                    name="file"
-                    onChange={handleFileChange}
-                    accept=".jpg, .jpeg, .png"
-                    className="formelement wrapper-input"
-                  />
-                </div>
+
+          <form className="form" onSubmit={handleSubmit}>
+            <div className="flex-x-center">
+              <div className="wrapper-input">
+                <div className="text-center m1">Upload file:</div>
+                <input
+                  type="file"
+                  name="file"
+                  onChange={handleFileChange}
+                  accept=".jpg, .jpeg, .png"
+                  className="formelement wrapper-input"
+                />
               </div>
+            </div>
 
-              <div>Name:</div>
-              <input
-                type="text"
-                name="name"
-                onChange={handleNameChange}
-                className="form-input"
-              />
+            <div>Name:</div>
+            <input
+              type="text"
+              name="name"
+              onChange={handleNameChange}
+              className="form-input"
+            />
 
-              <div>Description:</div>
-              <textarea
-                type="text"
-                name="description"
-                onChange={handleDescChange}
-                rows="6"
-                className="form-input"
-              />
-              <input type="submit" value="Submit" className="form-button" />
-            </form>
-          </div>
+            <div>Description:</div>
+            <textarea
+              type="text"
+              name="description"
+              onChange={handleDescChange}
+              rows="6"
+              className="form-input"
+            />
+            <input type="submit" value="Submit" className="form-button " />
+          </form>
         </div>
       </div>
     </div>

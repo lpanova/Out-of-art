@@ -69,7 +69,7 @@ function Register(props) {
                   className="form-input"
                 />
               </div>
-              <input type="submit" value="Add" className="form-button" />
+              <input type="submit" value="Register" className="form-button" />
             </form>
           </div>
         </div>

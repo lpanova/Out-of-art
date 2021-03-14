@@ -45,8 +45,14 @@ function Paint({ item, updateLike }) {
           </div>
         </article>
       </Link>
-      <button onClick={HandleClick}>{isLiked ? 'Unlike' : 'Like'}</button>
-      <div>Likes: {likesNumber}</div>
+      <div className="flex-x-center">
+        <button onClick={HandleClick} className="form-half-right-button">
+          {isLiked ? 'Unlike' : 'Like'}
+        </button>
+        <div className="form-half-left-button flex-x-center">
+          Likes: {likesNumber}
+        </div>
+      </div>
     </div>
   );
 }
