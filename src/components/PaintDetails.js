@@ -139,17 +139,23 @@ function PaintDetails(props) {
             <label>Author:</label>
             <div>{paintDetails.author}</div>
           </div>
-          <button onClick={HandleClick}>{isLiked ? 'Unlike' : 'Like'}</button>
-          <div>Likes: {likesNumber}</div>
+        </div>
+        <div className="flex-x-center">
+          <button onClick={HandleClick} className="form-half-right-button">
+            {isLiked ? 'Unlike' : 'Like'}
+          </button>
+          <div className="form-half-left-button">Likes: {likesNumber}</div>
         </div>
         {edit ? (
-          <div>
+          <div className="flex-x-center">
             {
-              <Link className="button" to={`/edit/${id}`}>
+              <Link className="form-half-right-button" to={`/edit/${id}`}>
                 Edit
               </Link>
             }
-            <button onClick={deletePaint}>Delete</button>
+            <button onClick={deletePaint} className="form-half-delete-button">
+              Delete
+            </button>
           </div>
         ) : (
           <div></div>
