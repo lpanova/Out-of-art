@@ -5,7 +5,7 @@ import '../App.css';
 import '../css/Form.css';
 
 function Register() {
-  const { register, errorUsername } = useContext(userAuthContext);
+  const { register, errorTakenUsername } = useContext(userAuthContext);
 
   const [username, setUsername] = useState({
     username: ''
@@ -23,13 +23,14 @@ function Register() {
   const inputNameFocus = useRef(null);
   const inputPassFocus = useRef(null);
 
-  function clearNameError(e) {
+  function clearNameError() {
     inputNameFocus.current.focus();
     setUsernameError({
       message: ''
     });
+    errorTakenUsername.message = '';
   }
-  function clearPassError(e) {
+  function clearPassError() {
     inputPassFocus.current.focus();
     setPasswordError({
       message: ''
@@ -89,7 +90,7 @@ function Register() {
                   ref={inputNameFocus}
                 />
                 <p className="error-message">{usernameError.message}</p>
-                <p className="error-message">{errorUsername.message}</p>
+                <p className="error-message">{errorTakenUsername.message}</p>
               </div>
 
               <div onClick={clearPassError}>

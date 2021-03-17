@@ -10,13 +10,16 @@ export const userAuthContext = createContext();
 
 function UserAuthentication(props) {
   let history = useHistory();
-  const [error, setError] = useState(false);
+
   const [userAuth, setUserAuth] = useState({
     username: localStorage.getItem('username'),
     authtoken: localStorage.getItem('authtoken')
   });
 
-  const [errorUsername, setErrorUsername] = useState({
+  const [errorTakenUsername, setErrorUsername] = useState({
+    message: ''
+  });
+  const [errorInvalidUsernamePass, setErrorInvalidUsernamePass] = useState({
     message: ''
   });
 
@@ -35,7 +38,7 @@ function UserAuthentication(props) {
         return response.json();
       })
       .then(function (data) {
-        console.log(data.description);
+        // console.log(data.description);
         if (
           data.description ===
           'This username is already taken. Please retry your request with a different username.'
@@ -60,7 +63,6 @@ function UserAuthentication(props) {
           console.log(error);
         }
         // console.log('Register request failed', error);
-        // setError(true);
       });
   };
 
@@ -79,18 +81,26 @@ function UserAuthentication(props) {
         return response.json();
       })
       .then(function (data) {
-        const { username } = data;
-        setUserAuth({
-          username: username
-        });
-        console.log(username);
-        localStorage.setItem('username', JSON.stringify(username));
-        localStorage.setItem('authtoken', data._kmd.authtoken);
-        localStorage.setItem('userId', data._id);
-        history.push('/home');
+        if (
+          data.description ===
+          'Invalid credentials. Please retry your request with correct credentials.'
+        ) {
+          setErrorInvalidUsernamePass({
+            message: data.description
+          });
+        } else {
+          const { username } = data;
+          setUserAuth({
+            username: username
+          });
+          console.log(username);
+          localStorage.setItem('username', JSON.stringify(username));
+          localStorage.setItem('authtoken', data._kmd.authtoken);
+          localStorage.setItem('userId', data._id);
+          history.push('/home');
+        }
       })
       .catch(function (error) {
-        setError(true);
         console.log('Login request failed', error);
       });
   };
@@ -119,7 +129,14 @@ function UserAuthentication(props) {
 
   return (
     <userAuthContext.Provider
-      value={{ userAuth, register, login, logout, errorUsername }}
+      value={{
+        userAuth,
+        register,
+        login,
+        logout,
+        errorTakenUsername,
+        errorInvalidUsernamePass
+      }}
     >
       {props.children}
     </userAuthContext.Provider>
