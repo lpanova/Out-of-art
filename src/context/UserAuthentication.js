@@ -10,9 +10,14 @@ export const userAuthContext = createContext();
 
 function UserAuthentication(props) {
   let history = useHistory();
-
+  const [error, setError] = useState(false);
   const [userAuth, setUserAuth] = useState({
-    username: localStorage.getItem('username')
+    username: localStorage.getItem('username'),
+    authtoken: localStorage.getItem('authtoken')
+  });
+
+  const [errorUsername, setErrorUsername] = useState({
+    message: ''
   });
 
   const register = (inputs) => {
@@ -30,6 +35,16 @@ function UserAuthentication(props) {
         return response.json();
       })
       .then(function (data) {
+        console.log(data.description);
+        if (
+          data.description ===
+          'This username is already taken. Please retry your request with a different username.'
+        ) {
+          setErrorUsername({
+            message:
+              'This username is already taken. Please retry your request with a different username.'
+          });
+        }
         const { username } = data;
         setUserAuth({
           username: username
@@ -41,7 +56,11 @@ function UserAuthentication(props) {
         history.push('/home');
       })
       .catch(function (error) {
-        console.log('Request failed', error);
+        if (error) {
+          console.log(error);
+        }
+        // console.log('Register request failed', error);
+        // setError(true);
       });
   };
 
@@ -71,7 +90,8 @@ function UserAuthentication(props) {
         history.push('/home');
       })
       .catch(function (error) {
-        console.log('Request failed', error);
+        setError(true);
+        console.log('Login request failed', error);
       });
   };
 
@@ -98,7 +118,9 @@ function UserAuthentication(props) {
   };
 
   return (
-    <userAuthContext.Provider value={{ userAuth, register, login, logout }}>
+    <userAuthContext.Provider
+      value={{ userAuth, register, login, logout, errorUsername }}
+    >
       {props.children}
     </userAuthContext.Provider>
   );

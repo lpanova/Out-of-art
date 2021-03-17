@@ -1,9 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
 import LoginIcon from '../login-icon.svg';
+import '../App.css';
+import '../css/Form.css';
 
 function Login(props) {
-  const { login } = useContext(userAuthContext);
+  const { login, error } = useContext(userAuthContext);
 
   const [inputs, setInputs] = useState({
     username: '',
@@ -18,6 +20,18 @@ function Login(props) {
   function handleSubmit(e) {
     e.preventDefault();
     login(inputs);
+  }
+
+  if (error) {
+    return (
+      <div className="wrapper-error">
+        <div>
+          <p className="error text-center">Oops!</p>
+          <p className="error-message text-center">Something went wrong.</p>
+          <p className="error-message text-center">Please try again later.</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -1,42 +1,71 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
 import RegisterIcon from '../register-icon.svg';
+import '../App.css';
+import '../css/Form.css';
 
-function Register(props) {
-  const { register } = useContext(userAuthContext);
+function Register() {
+  const { register, errorUsername } = useContext(userAuthContext);
 
-  const [inputs, setInputs] = useState({
-    username: '',
+  const [username, setUsername] = useState({
+    username: ''
+  });
+  const [password, setPassword] = useState({
     password: ''
   });
+  const [usernameError, setUsernameError] = useState({
+    message: ''
+  });
+  const [passwordError, setPasswordError] = useState({
+    message: ''
+  });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setInputs((inputs) => ({ ...inputs, [name]: value }));
+  const inputNameFocus = useRef(null);
+  const inputPassFocus = useRef(null);
+
+  function clearNameError(e) {
+    inputNameFocus.current.focus();
+    setUsernameError({
+      message: ''
+    });
+  }
+  function clearPassError(e) {
+    inputPassFocus.current.focus();
+    setPasswordError({
+      message: ''
+    });
+  }
+  function handleUsernameChange(event) {
+    setUsername(event.target.value);
+  }
+  function handlePasswordChange(event) {
+    setPassword(event.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    register(inputs);
+
+    if (username.length === undefined) {
+      setUsernameError({
+        message: 'Username is required.'
+      });
+    } else if (username.length < 6) {
+      setUsernameError({
+        message: 'Username must be greater than 6 characters.'
+      });
+    }
+    if (password.length === undefined) {
+      setPasswordError({
+        message: 'Password is required.'
+      });
+    } else if (password.length < 6) {
+      setPasswordError({
+        message: 'Password must be greater than 6 characters.'
+      });
+    } else {
+      register({ username, password });
+    }
   }
-
-  //   const kinveyBaseUrl = 'https://baas.kinvey.com/';
-  //   const kinveyAppKey = 'kid_S13nVzcMO';
-  //   const kinveyAppSecret = '35a963b58b3b44318e6556f9a84d7b0c';
-
-  //   const basicAuth = 'Basic ' + btoa(kinveyAppKey + ':' + kinveyAppSecret);
-
-  // fetch('https://baas.kinvey.com/user/kid_S13nVzcMO', {
-  //   method: 'POST',
-  //   Host: 'baas.kinvey.com',
-  //   Authorization: basicAuth,
-  //   headers: {
-  //     Accept: 'application/json',
-  //     Authorization: basicAuth,
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(inputs)
-  // });
 
   return (
     <div>
@@ -50,24 +79,29 @@ function Register(props) {
               <div className="flex-x-center">
                 <img src={RegisterIcon} alt="login" />
               </div>
-              <div>
+              <div onClick={clearNameError}>
                 <div>Username</div>
                 <input
-                  onChange={handleChange}
+                  onChange={handleUsernameChange}
                   type="text"
                   name="username"
                   className="form-input"
+                  ref={inputNameFocus}
                 />
+                <p className="error-message">{usernameError.message}</p>
+                <p className="error-message">{errorUsername.message}</p>
               </div>
 
-              <div>
+              <div onClick={clearPassError}>
                 <div>Password</div>
                 <input
-                  onChange={handleChange}
+                  onChange={handlePasswordChange}
                   type="text"
                   name="password"
                   className="form-input"
+                  ref={inputPassFocus}
                 />
+                <p className="error-message">{passwordError.message}</p>
               </div>
               <input type="submit" value="Register" className="form-button" />
             </form>

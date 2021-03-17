@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import '../App.css';
@@ -6,8 +6,10 @@ import '../css/Paint.css';
 import Loading from './Loading';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
 import { editOnlyPaint, getPaint } from '../utils/api';
+import { userAuthContext } from '../context/UserAuthentication';
 
 function PaintDetails(props) {
+  const { userAuth } = useContext(userAuthContext);
   const [paintDetails, setPaintDetails] = useState({
     url: '',
     name: '',
@@ -140,12 +142,28 @@ function PaintDetails(props) {
             <div>{paintDetails.author}</div>
           </div>
         </div>
-        <div className="flex-x-center">
+        {/* <div className="flex-x-center">
           <button onClick={HandleClick} className="form-half-right-button">
             {isLiked ? 'Unlike' : 'Like'}
           </button>
           <div className="form-half-left-button">Likes: {likesNumber}</div>
-        </div>
+        </div> */}
+
+        {userAuth.username ? (
+          <div className="flex-x-center">
+            <button onClick={HandleClick} className="form-half-right-button">
+              {isLiked ? 'Unlike' : 'Like'}
+            </button>
+            <div className="form-half-left-button flex-x-center">
+              Likes: {likesNumber}
+            </div>
+          </div>
+        ) : (
+          <div className="form-half-left-button flex-x-center">
+            Likes: {likesNumber}
+          </div>
+        )}
+
         {edit ? (
           <div className="flex-x-center">
             {

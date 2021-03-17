@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css';
 import '../css/Paint.css';
+import { userAuthContext } from '../context/UserAuthentication';
 
 function Paint({ item, updateLike }) {
+  const { userAuth } = useContext(userAuthContext);
+
   const username = localStorage.getItem('username');
   const isLiked = item.likes.indexOf(username) !== -1;
   console.log(item, updateLike);
@@ -45,14 +48,21 @@ function Paint({ item, updateLike }) {
           </div>
         </article>
       </Link>
-      <div className="flex-x-center">
-        <button onClick={HandleClick} className="form-half-right-button">
-          {isLiked ? 'Unlike' : 'Like'}
-        </button>
+
+      {userAuth.username ? (
+        <div className="flex-x-center">
+          <button onClick={HandleClick} className="form-half-right-button">
+            {isLiked ? 'Unlike' : 'Like'}
+          </button>
+          <div className="form-half-left-button flex-x-center">
+            Likes: {likesNumber}
+          </div>
+        </div>
+      ) : (
         <div className="form-half-left-button flex-x-center">
           Likes: {likesNumber}
         </div>
-      </div>
+      )}
     </div>
   );
 }
