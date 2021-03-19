@@ -1,10 +1,10 @@
 import React from 'react';
-import '../css/Form.css';
+import '../css/Home.css';
 import { Link } from 'react-router-dom';
 
 function Home() {
   return (
-    <div className="wrapper-form">
+    <div className="wrapper-home-background">
       <div className="wrapper-home">
         <h3 className="text-home">Out of ART for everyone.</h3>
         <h5>

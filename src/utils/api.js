@@ -54,3 +54,14 @@ export function getMyPaintsData(appKey, authToken, endpoint) {
     }
   });
 }
+
+export function sortPaintsByLikes(appKey, authToken) {
+  return fetch(`https://baas.kinvey.com/appdata/${appKey}/Paints`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+}

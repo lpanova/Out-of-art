@@ -281,7 +281,7 @@ function EditPaint(props) {
       <div className="wrapper-form">
         <div>
           <div>
-            <h3 className="text-center">Create Paint</h3>
+            <h3 className="text-center">Edit Painting</h3>
           </div>
           <div className=" flex-x-center">
             <form className="form" onSubmit={handleSubmit}>

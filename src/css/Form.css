@@ -1,3 +1,13 @@
+.green{
+  background-color:#cddc39 ;
+}
+.red{
+  background-color: #f44336;
+}
+.black{
+  background-color: black;
+}
+
 .wrapper-form {
     position: absolute;
     width: 100%;
@@ -178,48 +188,6 @@
     outline: none;
   }
   
-
-  .button-home{
-    display: inline-block;
-    width: 15em;
-    margin: 0.3em 0em 0.3em 0em;
-    background: #3f51b5;
-    color: white;
-    border: none;
-    padding: 0.3em;
-    padding: 1em;
-    font-weight: 2em;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-  border-top-right-radius: 30px;
-  border-top-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
-    margin-left: 3px;
-  }
-
-  .button-home:hover {
-    cursor: pointer;
-    background-color: #363636;
-    color:#cddc39;
-  }
-
-  .button-home:focus {
-    outline: none;
-  }
-
-  .text-home{
-    font-size: 2em;
-    color: white;
-    font-weight: bolder;
-  }
-
-
-  .wrapper-home{
-    position: relative;
-    text-align: center;
-    height: 40%;
-  }
-  
 /* upload*/
 
    input[type="file" ] {
@@ -254,3 +222,26 @@ input.formelement::-webkit-file-upload-button:hover{
   color:#cddc39;
 }
 
+/*error*/
+.wrapper-error{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error {
+  text-align: center;
+  font-size: 1.8em;
+  color:red;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.error-message {
+  font-size: 0.8em;
+  color:red;
+  font-weight: bold;
+  font-style: italic;
+}

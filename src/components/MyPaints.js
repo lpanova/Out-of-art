@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
+import '../css/Loading.css';
 import Loading from './Loading.js';
 import Paint from './Paint';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
@@ -50,9 +51,12 @@ function MyPaints() {
   if (loading) {
     return <Loading className="wrapper-loader" />;
   }
+  if (myPaints.length === 0) {
+    return <div className="header">There are no paintings.</div>;
+  }
   return (
     <div>
-      <p className="name">Paints</p>
+      <p className="header">My paintings</p>
       <div className="flex-x flex-wrap">
         {myPaints.map((item) => (
           <Paint key={item._id} item={{ ...item }} updateLike={updateLike} />

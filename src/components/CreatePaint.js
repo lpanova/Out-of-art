@@ -183,7 +183,7 @@ function CreatePaint() {
       <div className="wrapper-form">
         <div>
           <div className="text-center">
-            <h3>Create Paint</h3>
+            <h3>Create Painting</h3>
           </div>
 
           <form className="form" onSubmit={handleSubmit}>

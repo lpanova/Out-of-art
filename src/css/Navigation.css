@@ -46,14 +46,6 @@
    
   }
 
-  
-  
-  /* @media screen and (max-width: 500px) {
-    .navbar a,.navbar .right {
-      float: none;
-      display: block;
-    }
-  } */
   @media screen and (max-width: 550px) {
     .navbar-left{
    width: 100%;

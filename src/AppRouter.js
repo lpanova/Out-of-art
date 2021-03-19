@@ -15,7 +15,7 @@ import { userAuthContext } from './context/UserAuthentication';
 function AppRouter(props) {
   const { userAuth } = useContext(userAuthContext);
   return (
-    <div>
+    <div className="second">
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/home" component={Home} />

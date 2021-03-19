@@ -5,7 +5,7 @@ import Header from './components/header/Header';
 
 function App() {
   return (
-    <div>
+    <div className="main">
       <UserAuthentication>
         <Header />
         <AppRouter />

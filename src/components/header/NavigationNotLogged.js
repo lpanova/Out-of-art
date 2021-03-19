@@ -5,8 +5,8 @@ import { NavLink } from 'react-router-dom';
 function NavigationNotLogged() {
   return (
     <div className="navbar">
-      <NavLink to="/home"> Home</NavLink>
-      <NavLink to="/paints"> Paints</NavLink>
+      <NavLink to="/home">Home</NavLink>
+      <NavLink to="/paints">Paintings</NavLink>
       <NavLink to="/login" className="right">
         Login
       </NavLink>

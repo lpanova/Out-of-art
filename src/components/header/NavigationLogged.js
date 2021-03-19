@@ -9,9 +9,9 @@ function NavigationLogged() {
     <div className="navbar flex-between">
       <div className="navbar-left">
         <NavLink to="/home"> Home</NavLink>
-        <NavLink to="/paints"> Paints</NavLink>
-        <NavLink to="/mypaints"> My Paints</NavLink>
-        <NavLink to="/create"> Create Paint</NavLink>
+        <NavLink to="/paints"> Paintings</NavLink>
+        <NavLink to="/mypaints"> My Paintings</NavLink>
+        <NavLink to="/create"> Create Painting</NavLink>
       </div>
       <div className="navbar-right">
         <div className="right active">Hello, {userAuth.username}!</div>
