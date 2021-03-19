@@ -54,8 +54,7 @@ function Register() {
       setUsernameError({
         message: 'Username must be greater than 6 characters.'
       });
-    }
-    if (password.length === undefined) {
+    } else if (password.length === undefined) {
       setPasswordError({
         message: 'Password is required.'
       });

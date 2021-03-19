@@ -2,6 +2,14 @@
     width: 100%;
     background-color: #000;
     overflow: auto;
+    flex-wrap: wrap;
+  }
+
+  .navbar {
+    width: 100%;
+    background-color: #000;
+    overflow: auto;
+
   }
   
   .navbar a {
@@ -40,9 +48,30 @@
 
   
   
-  @media screen and (max-width: 500px) {
+  /* @media screen and (max-width: 500px) {
     .navbar a,.navbar .right {
       float: none;
       display: block;
+    }
+  } */
+  @media screen and (max-width: 550px) {
+    .navbar-left{
+   width: 100%;
+   display: flex;
+    justify-content: inherit;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .navbar-right{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .navbar a,.navbar .right {
+   font-size: 14px;
     }
   }

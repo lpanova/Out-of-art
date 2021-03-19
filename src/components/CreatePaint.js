@@ -129,28 +129,6 @@ function CreatePaint() {
           message: 'Please select image size less than 2 MB'
         });
       } else {
-        const metadata = {
-          _filename: file.name,
-          mimeType: file.type,
-          _public: true
-        };
-
-        const resp1 = await createMetadata(
-          metadata,
-          kinveyAppKey,
-          getAuthenticationToken()
-        );
-        if (!resp1.ok) {
-          throw new Error('cannot write metadata');
-        }
-
-        const resp1json = await resp1.json();
-
-        upload(resp1json._uploadURL, {
-          ...resp1json._requiredHeaders,
-          'Content-Type': metadata.mimeType
-        });
-
         if (name.length === 0) {
           setNameError({
             message: 'Name is required.'
@@ -159,12 +137,33 @@ function CreatePaint() {
           setNameError({
             message: 'Name must be less than 30 characters.'
           });
-        }
-        if (description.length > 50) {
+        } else if (description.length > 50) {
           setDescriptionError({
             message: 'Description must be less than 50 characters.'
           });
         } else {
+          const metadata = {
+            _filename: file.name,
+            mimeType: file.type,
+            _public: true
+          };
+
+          const resp1 = await createMetadata(
+            metadata,
+            kinveyAppKey,
+            getAuthenticationToken()
+          );
+          if (!resp1.ok) {
+            throw new Error('cannot write metadata');
+          }
+
+          const resp1json = await resp1.json();
+
+          upload(resp1json._uploadURL, {
+            ...resp1json._requiredHeaders,
+            'Content-Type': metadata.mimeType
+          });
+
           const resp3 = await createPaint(
             resp1json._id,
             kinveyAppKey,

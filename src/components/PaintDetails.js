@@ -58,7 +58,6 @@ function PaintDetails(props) {
     }
 
     const resp1json = await resp1.json();
-    // console.log(resp1json);
     setPaintDetails(resp1json);
     setFileId(resp1json.fileImage._id);
     setLoading(false);
@@ -130,54 +129,51 @@ function PaintDetails(props) {
           />
         </div>
         <div className="text-details">
-          <div>
+          <div className="word-break">
             <h3>{paintDetails.name}</h3>
           </div>
-          <div>
+          <div className="word-break">
             <label>Description:</label>
             <div>{paintDetails.description}</div>
           </div>
-          <div>
+          <div className="word-break">
             <label>Author:</label>
             <div>{paintDetails.author}</div>
           </div>
+          <div>
+            <label>Likes</label>
+            <div>{likesNumber}</div>
+          </div>
         </div>
-        {/* <div className="flex-x-center">
-          <button onClick={HandleClick} className="form-half-right-button">
-            {isLiked ? 'Unlike' : 'Like'}
-          </button>
-          <div className="form-half-left-button">Likes: {likesNumber}</div>
-        </div> */}
-
-        {userAuth.username ? (
-          <div className="flex-x-center">
-            <button onClick={HandleClick} className="form-half-right-button">
-              {isLiked ? 'Unlike' : 'Like'}
-            </button>
-            <div className="form-half-left-button flex-x-center">
-              Likes: {likesNumber}
+        <div className="flex-x">
+          {userAuth.username ? (
+            <div>
+              <button
+                onClick={HandleClick}
+                className="form-basic-button height green"
+              >
+                {isLiked ? 'Unlike' : 'Like'}
+              </button>
             </div>
-          </div>
-        ) : (
-          <div className="form-half-left-button flex-x-center">
-            Likes: {likesNumber}
-          </div>
-        )}
+          ) : (
+            <div></div>
+          )}
 
-        {edit ? (
-          <div className="flex-x-center">
-            {
-              <Link className="form-half-right-button" to={`/edit/${id}`}>
-                Edit
-              </Link>
-            }
-            <button onClick={deletePaint} className="form-half-delete-button">
-              Delete
-            </button>
-          </div>
-        ) : (
-          <div></div>
-        )}
+          {edit ? (
+            <div className="flex-x">
+              {
+                <Link to={`/edit/${id}`} className="form-basic-button black">
+                  Edit
+                </Link>
+              }
+              <button onClick={deletePaint} className="form-basic-button red">
+                Delete
+              </button>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </article>
     </div>
   );

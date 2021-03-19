@@ -17,11 +17,28 @@
   display: flex;
   flex-wrap: wrap;
 }
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.green{
+  background-color:#cddc39 ;
+}
+.red{
+  background-color: #f44336;
+}
+.black{
+  background-color: black;
+}
 
 .text-center{
   text-align: center;
 }
-
+.word-break{
+  word-break: break-all;
+}
 .name {
   margin: 0.3em;
   text-align: center;

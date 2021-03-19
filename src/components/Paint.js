@@ -37,7 +37,7 @@ function Paint({ item, updateLike }) {
           </div>
           <div>
             <div className="text-details">
-              <div>
+              <div className="word-break">
                 <h3>{item.name}</h3>
               </div>
               <div>

@@ -130,18 +130,28 @@
     margin-left: 3px;
   }
 
-  .form-half-delete-button {
-    display: inline-block;
-    text-align: center;
-    width: 47%;
+  .form-basic-button {
+    display: flex;
+   justify-content: center;
+   align-items: center;
+    width: 7em;
     margin: 0.3em 0em 0.3em 0em;
-    background: red;
     color: white;
     border: none;
     padding: 0.3em;
     border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
     margin-left: 3px;
+  }
+
+  .height{
+    height:2.4em;
+  }
+
+  .form-basic-button:hover {
+    cursor: pointer;
+    background-color: #363636;
+    color:#cddc39;
   }
   
   .form-button:hover {
@@ -156,6 +166,10 @@
     color:#cddc39;
   }
   
+  .form-basic-button:focus {
+    outline: none;
+  }
+
   .form-button:focus {
     outline: none;
   }

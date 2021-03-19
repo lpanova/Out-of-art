@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
 import { getPaint } from '../utils/api';
+import { useHistory } from 'react-router-dom';
+import '../App.css';
+import '../css/Form.css';
 
 function EditPaint(props) {
+  let history = useHistory();
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -27,13 +31,50 @@ function EditPaint(props) {
 
   const id = props.match.params.id;
 
+  const [fileError, setFileError] = useState({
+    message: ''
+  });
+
+  const [nameError, setNameError] = useState({
+    message: ''
+  });
+
+  const [descriptionError, setDescriptionError] = useState({
+    message: ''
+  });
+
+  const inputFileFocus = useRef(null);
+  const inputNameFocus = useRef(null);
+  const inputDescriptionFocus = useRef(null);
+
+  function clearFileError() {
+    inputFileFocus.current.focus();
+    setFileError({
+      message: ''
+    });
+  }
+
+  function clearNameError() {
+    inputNameFocus.current.focus();
+    setNameError({
+      message: ''
+    });
+  }
+
+  function clearDescriptionError() {
+    inputDescriptionFocus.current.focus();
+    setDescriptionError({
+      message: ''
+    });
+  }
+
   async function getPaintInfo() {
     const resp1 = await getPaint(kinveyAppKey, getAuthenticationToken(), id);
     if (!resp1.ok) {
       throw new Error('cannot get paintsData');
     }
     const resp1json = await resp1.json();
-    console.log(resp1json);
+
     setName(resp1json.name);
     setDescription(resp1json.description);
     setLikes(resp1json.likes);
@@ -53,9 +94,8 @@ function EditPaint(props) {
       _downloadURL: resp1json.fileImage._downloadURL,
       _type: resp1json.fileImage._type
     });
-
-    console.log(fileId);
   }
+
   useEffect(() => {
     getPaintInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,51 +191,94 @@ function EditPaint(props) {
     event.preventDefault();
 
     if (file === null) {
-      const resp3 = await editOnlyPaint(
-        props.match.params.id,
-        kinveyAppKey,
-        getAuthenticationToken()
-      );
-      if (!resp3.ok) {
-        throw new Error('cannot write in paint collection');
+      if (name.length === 0) {
+        setNameError({
+          message: 'Name is required.'
+        });
+      } else if (name.length > 30) {
+        setNameError({
+          message: 'Name must be less than 30 characters.'
+        });
+      } else if (description.length > 50) {
+        setDescriptionError({
+          message: 'Description must be less than 50 characters.'
+        });
+      } else {
+        const resp3 = await editOnlyPaint(
+          props.match.params.id,
+          kinveyAppKey,
+          getAuthenticationToken()
+        );
+        history.push('/mypaints');
+        if (!resp3.ok) {
+          throw new Error('cannot write in paint collection');
+        }
       }
     } else {
-      const metadata = {
-        _filename: file.name,
-        mimeType: file.type,
-        _public: true
-      };
+      if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
+        setFileError({
+          message: 'Please select valid image format.'
+        });
+      } else if (file) {
+        const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
+        if (size > 2) {
+          setFileError({
+            message: 'Please select image size less than 2 MB'
+          });
+        } else {
+          if (name.length === 0) {
+            setNameError({
+              message: 'Name is required.'
+            });
+          } else if (name.length > 30) {
+            setNameError({
+              message: 'Name must be less than 30 characters.'
+            });
+          } else if (description.length > 50) {
+            setDescriptionError({
+              message: 'Description must be less than 50 characters.'
+            });
+          } else {
+            const metadata = {
+              _filename: file.name,
+              mimeType: file.type,
+              _public: true
+            };
 
-      const resp1 = await createMetadata(
-        metadata,
-        kinveyAppKey,
-        getAuthenticationToken()
-      );
-      if (!resp1.ok) {
-        throw new Error('cannot write metadata');
-      }
+            const resp1 = await createMetadata(
+              metadata,
+              kinveyAppKey,
+              getAuthenticationToken()
+            );
+            if (!resp1.ok) {
+              throw new Error('cannot write metadata');
+            }
 
-      const resp1json = await resp1.json();
+            const resp1json = await resp1.json();
 
-      upload(resp1json._uploadURL, {
-        ...resp1json._requiredHeaders,
-        'Content-Type': metadata.mimeType
-      });
+            upload(resp1json._uploadURL, {
+              ...resp1json._requiredHeaders,
+              'Content-Type': metadata.mimeType
+            });
 
-      const resp3 = await editPaint(
-        resp1json._id,
-        kinveyAppKey,
-        getAuthenticationToken()
-      );
-      if (!resp3.ok) {
-        throw new Error('cannot write in paint collection');
+            const resp3 = await editPaint(
+              resp1json._id,
+              kinveyAppKey,
+              getAuthenticationToken()
+            );
+            history.push('/mypaints');
+            if (!resp3.ok) {
+              throw new Error('cannot write in paint collection');
+            }
+          }
+        }
       }
     }
   }
 
   return (
     <div>
-      <div>
+      <div className="wrapper-form">
         <div>
           <div>
             <h3 className="text-center">Create Paint</h3>
@@ -203,7 +286,7 @@ function EditPaint(props) {
           <div className=" flex-x-center">
             <form className="form" onSubmit={handleSubmit}>
               <div className="flex-x-center">
-                <div className="wrapper-input">
+                <div className="wrapper-input" onClick={clearFileError}>
                   <div className="text-center m1">Upload file:</div>
                   <input
                     type="file"
@@ -211,28 +294,38 @@ function EditPaint(props) {
                     accept=".jpg, .jpeg, .png"
                     className="formelement wrapper-input"
                     onChange={handleFileChange}
+                    ref={inputFileFocus}
                   />
+                  <p className="error-message">{fileError.message}</p>
                 </div>
               </div>
+              <div onClick={clearNameError}>
+                <div>Name:</div>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-input"
+                  value={name}
+                  onChange={handleNameChange}
+                  ref={inputNameFocus}
+                />
+                <p className="error-message">{nameError.message}</p>
+              </div>
 
-              <div>Name:</div>
-              <input
-                type="text"
-                name="name"
-                className="form-input"
-                value={name}
-                onChange={handleNameChange}
-              />
+              <div onClick={clearDescriptionError}>
+                <div>Description:</div>
+                <textarea
+                  type="text"
+                  name="description"
+                  rows="6"
+                  className="form-input"
+                  value={description}
+                  onChange={handleDescChange}
+                  ref={inputDescriptionFocus}
+                />
+                <p className="error-message">{descriptionError.message}</p>
+              </div>
 
-              <div>Description:</div>
-              <textarea
-                type="text"
-                name="description"
-                rows="6"
-                className="form-input"
-                value={description}
-                onChange={handleDescChange}
-              />
               <input type="submit" value="Submit" className="form-button" />
             </form>
           </div>
