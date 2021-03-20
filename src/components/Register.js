@@ -1,11 +1,14 @@
 import React, { useState, useContext, useRef } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
+import FacebookLogin from 'react-facebook-login';
 import RegisterIcon from '../register-icon.svg';
 import '../App.css';
 import '../css/Form.css';
 
 function Register() {
   const { register, errorTakenUsername } = useContext(userAuthContext);
+
+  const [login, setLogin] = useState(false);
 
   const [username, setUsername] = useState({
     username: ''
@@ -67,6 +70,18 @@ function Register() {
     }
   }
 
+  const responseFacebook = (response) => {
+    let username = response.name;
+    let password = response.name;
+
+    if (response.accessToken) {
+      register({ username, password });
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  };
+
   return (
     <div>
       <div className="wrapper-form">
@@ -75,36 +90,54 @@ function Register() {
             <h3 className="text-center">Register</h3>
           </div>
           <div className=" flex-x-center">
-            <form onSubmit={handleSubmit} className="form">
-              <div className="flex-x-center">
-                <img src={RegisterIcon} alt="login" />
-              </div>
-              <div onClick={clearNameError}>
-                <div>Username</div>
-                <input
-                  onChange={handleUsernameChange}
-                  type="text"
-                  name="username"
-                  className="form-input"
-                  ref={inputNameFocus}
-                />
-                <p className="error-message">{usernameError.message}</p>
-                <p className="error-message">{errorTakenUsername.message}</p>
-              </div>
+            <div className="form">
+              <form onSubmit={handleSubmit}>
+                <div className="flex-x-center">
+                  <img src={RegisterIcon} alt="login" />
+                </div>
+                <div onClick={clearNameError}>
+                  <div>Username</div>
+                  <input
+                    onChange={handleUsernameChange}
+                    type="text"
+                    name="username"
+                    className="form-input"
+                    ref={inputNameFocus}
+                  />
+                  <p className="error-message">{usernameError.message}</p>
+                </div>
 
-              <div onClick={clearPassError}>
-                <div>Password</div>
-                <input
-                  onChange={handlePasswordChange}
-                  type="text"
-                  name="password"
-                  className="form-input"
-                  ref={inputPassFocus}
-                />
-                <p className="error-message">{passwordError.message}</p>
+                <div onClick={clearPassError}>
+                  <div>Password</div>
+                  <input
+                    onChange={handlePasswordChange}
+                    type="text"
+                    name="password"
+                    className="form-input"
+                    ref={inputPassFocus}
+                  />
+                  <p className="error-message">{passwordError.message}</p>
+                </div>
+                <input type="submit" value="Register" className="form-button" />
+              </form>
+              <div className="flex-x-center">
+                <div>
+                  <p className="text-center">Or register with Facebook</p>
+                  <p className="error-message text-center">
+                    {errorTakenUsername.message}
+                  </p>
+                  {
+                    <FacebookLogin
+                      appId="1968952269913927"
+                      fields="name,email,picture"
+                      scope="public_profile,user_friends"
+                      callback={responseFacebook}
+                      icon="fa-facebook"
+                    />
+                  }
+                </div>
               </div>
-              <input type="submit" value="Register" className="form-button" />
-            </form>
+            </div>
           </div>
         </div>
       </div>

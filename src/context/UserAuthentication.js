@@ -39,30 +39,26 @@ function UserAuthentication(props) {
       })
       .then(function (data) {
         // console.log(data.description);
-        if (
-          data.description ===
-          'This username is already taken. Please retry your request with a different username.'
-        ) {
+        if (data.error) {
           setErrorUsername({
-            message:
-              'This username is already taken. Please retry your request with a different username.'
+            message: data.description
           });
+        } else {
+          const { username } = data;
+          setUserAuth({
+            username: username
+          });
+          console.log(username);
+          localStorage.setItem('username', JSON.stringify(username));
+          localStorage.setItem('authtoken', data._kmd.authtoken);
+          localStorage.setItem('userId', data._id);
+          history.push('/home');
         }
-        const { username } = data;
-        setUserAuth({
-          username: username
-        });
-        console.log(username);
-        localStorage.setItem('username', JSON.stringify(username));
-        localStorage.setItem('authtoken', data._kmd.authtoken);
-        localStorage.setItem('userId', data._id);
-        history.push('/home');
       })
       .catch(function (error) {
         if (error) {
           console.log(error);
         }
-        // console.log('Register request failed', error);
       });
   };
 
@@ -81,10 +77,7 @@ function UserAuthentication(props) {
         return response.json();
       })
       .then(function (data) {
-        if (
-          data.description ===
-          'Invalid credentials. Please retry your request with correct credentials.'
-        ) {
+        if (data.error) {
           setErrorInvalidUsernamePass({
             message: data.description
           });
@@ -120,7 +113,7 @@ function UserAuthentication(props) {
         setUserAuth({
           username: localStorage.getItem('username')
         });
-        history.push('/home');
+        history.push('/login');
       })
       .catch(function (error) {
         console.log('Request logout failed', error);

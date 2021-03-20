@@ -1,11 +1,14 @@
 import React, { useState, useContext, useRef } from 'react';
 import { userAuthContext } from '../context/UserAuthentication';
+import FacebookLogin from 'react-facebook-login';
 import LoginIcon from '../login-icon.svg';
 import '../App.css';
 import '../css/Form.css';
 
 function Login() {
   const { login, errorInvalidUsernamePass } = useContext(userAuthContext);
+
+  const [loginFacebook, setLoginFacebook] = useState(false);
 
   const [username, setUsername] = useState({
     username: ''
@@ -62,7 +65,17 @@ function Login() {
       login({ username, password });
     }
   }
+  const responseFacebook = (response) => {
+    let username = response.name;
+    let password = response.name;
 
+    if (response.accessToken) {
+      login({ username, password });
+      setLoginFacebook(true);
+    } else {
+      setLoginFacebook(false);
+    }
+  };
   return (
     <div>
       <div className="wrapper-form">
@@ -70,39 +83,57 @@ function Login() {
           <div className="text-center">
             <h3>Login</h3>
           </div>
-          <form onSubmit={handleSubmit} className="form">
-            <div className="flex-x-center">
-              <img src={LoginIcon} alt="login icon" />
-            </div>
-            <div onClick={clearNameError}>
-              <label>Username</label>
-              <input
-                onChange={handleUsernameChange}
-                type="text"
-                name="username"
-                ref={inputNameFocus}
-              />
-              <p className="error-message">{usernameError.message}</p>
-              <p className="error-message">
-                {errorInvalidUsernamePass.message}
-              </p>
-            </div>
+          <div></div>
+          <div className="form">
+            <form onSubmit={handleSubmit}>
+              <div className="flex-x-center">
+                <img src={LoginIcon} alt="login icon" />
+              </div>
+              <div onClick={clearNameError}>
+                <label>Username</label>
+                <input
+                  onChange={handleUsernameChange}
+                  type="text"
+                  name="username"
+                  ref={inputNameFocus}
+                />
+                <p className="error-message">{usernameError.message}</p>
+                <p className="error-message">
+                  {errorInvalidUsernamePass.message}
+                </p>
+              </div>
 
-            <div onClick={clearPassError}>
-              <label>Password</label>
-              <input
-                onChange={handlePasswordChange}
-                type="text"
-                name="password"
-                ref={inputPassFocus}
-              />
-              <p className="error-message">{passwordError.message}</p>
-              <p className="error-message">
-                {errorInvalidUsernamePass.message}
-              </p>
+              <div onClick={clearPassError}>
+                <label>Password</label>
+                <input
+                  onChange={handlePasswordChange}
+                  type="text"
+                  name="password"
+                  ref={inputPassFocus}
+                />
+                <p className="error-message">{passwordError.message}</p>
+              </div>
+              <input type="submit" value="Login" className="form-button" />
+            </form>
+
+            <div className="flex-x-center">
+              <div>
+                <p className="text-center">Or login with Facebook</p>
+                {/* <p className="error-message">
+                  {errorInvalidUsernamePass.message}
+                </p> */}
+                {
+                  <FacebookLogin
+                    appId="1968952269913927"
+                    fields="name,email,picture"
+                    scope="public_profile,user_friends"
+                    callback={responseFacebook}
+                    icon="fa-facebook"
+                  />
+                }
+              </div>
             </div>
-            <input type="submit" value="Login" className="form-button" />
-          </form>
+          </div>
         </div>
       </div>
     </div>

@@ -245,3 +245,11 @@ input.formelement::-webkit-file-upload-button:hover{
   font-weight: bold;
   font-style: italic;
 }
+span > .kep-login-facebook.metro{
+  border-radius: 30px;
+  margin-bottom: 1em;
+}
+
+span > .kep-login-facebook.metro:focus {
+  outline: none;
+}
