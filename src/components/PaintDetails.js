@@ -1,14 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../App.css';
 import '../css/Paint.css';
 import Loading from './Loading';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
-import { editOnlyPaint, getPaint } from '../utils/api';
+import {
+  editOnlyPaint,
+  getPaint,
+  deletePaint,
+  deletePaintFile
+} from '../utils/api';
 import { userAuthContext } from '../context/UserAuthentication';
 
 function PaintDetails(props) {
+  const history = useHistory();
+
   const { userAuth } = useContext(userAuthContext);
   const [paintDetails, setPaintDetails] = useState({
     url: '',
@@ -20,24 +27,19 @@ function PaintDetails(props) {
   const [fileId, setFileId] = useState('');
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(false);
+
   const username = localStorage.username;
-  const history = useHistory();
   const id = props.match.params.id;
   const isLiked = paintDetails.likes.indexOf(username) !== -1;
   let likesNumber = paintDetails.likes.length - 1;
 
   async function updateLike(data) {
-    const resp1 = await editOnlyPaint(
-      kinveyAppKey,
-      getAuthenticationToken(),
-      data
-    );
-
-    if (!resp1.ok) {
-      throw new Error('cannot write in paint collection');
+    try {
+      await editOnlyPaint(kinveyAppKey, getAuthenticationToken(), data);
+      await getDetailPaint();
+    } catch (error) {
+      history.push('/error');
     }
-
-    await getDetailPaint();
   }
 
   async function HandleClick() {
@@ -52,62 +54,32 @@ function PaintDetails(props) {
   }
 
   async function getDetailPaint() {
-    const resp1 = await getPaint(kinveyAppKey, getAuthenticationToken(), id);
-    if (!resp1.ok) {
-      throw new Error('cannot get paintsData');
-    }
+    try {
+      const resp1 = await getPaint(kinveyAppKey, getAuthenticationToken(), id);
+      const resp1json = await resp1.json();
+      setPaintDetails(resp1json);
+      setFileId(resp1json.fileImage._id);
+      setLoading(false);
 
-    const resp1json = await resp1.json();
-    setPaintDetails(resp1json);
-    setFileId(resp1json.fileImage._id);
-    setLoading(false);
-
-    if (username === resp1json.author) {
-      setEdit(true);
-    }
-  }
-
-  function delPainObject(kinveyAppKey, authToken, id) {
-    return fetch(
-      `https://baas.kinvey.com/appdata/${kinveyAppKey}/Paints/${id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          Authorization: authToken,
-          'Content-Type': 'application/json'
-        }
+      if (username === resp1json.author) {
+        setEdit(true);
       }
-    );
+    } catch (error) {
+      history.push('/error');
+    }
   }
 
-  function delFile(delFile) {
-    return fetch(`https://baas.kinvey.com/blob/${kinveyAppKey}/${fileId}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        Authorization: getAuthenticationToken(),
-        'Content-Type': 'application/json'
-      }
-    });
-  }
+  async function deletePaintObject() {
+    try {
+      await deletePaintFile(kinveyAppKey, getAuthenticationToken(), fileId);
 
-  async function deletePaint() {
-    const resp1 = await delFile(delFile);
-    if (!resp1.ok) {
-      throw new Error('cannot get paintsData');
-    }
+      await deletePaint(kinveyAppKey, getAuthenticationToken(), id);
 
-    const resp2 = await delPainObject(
-      kinveyAppKey,
-      getAuthenticationToken(),
-      id
-    );
-    if (!resp2.ok) {
-      throw new Error('cannot get paintsData');
+      history.push('/paints');
+      console.log('success');
+    } catch (error) {
+      history.push('/error');
     }
-    history.push('/paints');
-    console.log('success');
   }
 
   useEffect(() => {
@@ -166,7 +138,10 @@ function PaintDetails(props) {
                   Edit
                 </Link>
               }
-              <button onClick={deletePaint} className="form-basic-button red">
+              <button
+                onClick={deletePaintObject}
+                className="form-basic-button red"
+              >
                 Delete
               </button>
             </div>

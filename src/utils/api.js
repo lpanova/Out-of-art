@@ -65,3 +65,58 @@ export function sortPaintsByLikes(appKey, authToken) {
     }
   });
 }
+
+export function deletePaint(appKey, authToken, id) {
+  return fetch(`https://baas.kinvey.com/appdata/${appKey}/Paints/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      Authorization: authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+export function deletePaintFile(appKey, authToken, fileId) {
+  return fetch(`https://baas.kinvey.com/blob/${appKey}/${fileId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      Authorization: authToken,
+      'Content-Type': 'application/json'
+    }
+  });
+}
+
+//create painting
+
+export function createMetadata(metadata, appKey, authToken, type) {
+  return fetch(`https://baas.kinvey.com/blob/${appKey}`, {
+    method: 'POST',
+    Host: 'baas.kinvey.com',
+    headers: {
+      Accept: 'application/json',
+      Authorization: authToken,
+      'Content-Type': 'application/json',
+      'X-Kinvey-Content-Type': type
+    },
+    body: JSON.stringify(metadata)
+  });
+}
+
+export function upload(uploadUrl, headers, file) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (e) {
+    fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        ...headers
+      },
+      body: e.target.result
+    }).then(function (response) {
+      return response.text();
+    });
+  };
+
+  fileReader.readAsArrayBuffer(file);
+}

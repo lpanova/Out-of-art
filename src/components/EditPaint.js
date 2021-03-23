@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
-import { getPaint } from '../utils/api';
+import { getPaint, createMetadata, upload } from '../utils/api';
 import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Form.css';
@@ -111,37 +111,6 @@ function EditPaint(props) {
     setDescription(event.target.value);
   }
 
-  function createMetadata(metadata, appKey, authToken) {
-    return fetch(`https://baas.kinvey.com/blob/${appKey}/${fileId}`, {
-      method: 'PUT',
-      Host: 'baas.kinvey.com',
-      headers: {
-        Accept: 'application/json',
-        Authorization: authToken,
-        'Content-Type': 'application/json',
-        'X-Kinvey-Content-Type': file.type
-      },
-      body: JSON.stringify(metadata)
-    });
-  }
-
-  function upload(uploadUrl, headers) {
-    const fileReader = new FileReader();
-    fileReader.onload = function (e) {
-      fetch(uploadUrl, {
-        method: 'PUT',
-        headers: {
-          ...headers
-        },
-        body: e.target.result
-      }).then(function (response) {
-        return response.text();
-      });
-    };
-
-    fileReader.readAsArrayBuffer(file);
-  }
-
   function editPaint(id, appKey, authToken) {
     return fetch(
       `https://baas.kinvey.com/appdata/${appKey}/Paints/${props.match.params.id}`,
@@ -190,89 +159,92 @@ function EditPaint(props) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (file === null) {
-      if (name.length === 0) {
-        setNameError({
-          message: 'Name is required.'
-        });
-      } else if (name.length > 30) {
-        setNameError({
-          message: 'Name must be less than 30 characters.'
-        });
-      } else if (description.length > 50) {
-        setDescriptionError({
-          message: 'Description must be less than 50 characters.'
-        });
-      } else {
-        const resp3 = await editOnlyPaint(
-          props.match.params.id,
-          kinveyAppKey,
-          getAuthenticationToken()
-        );
-        history.push('/mypaints');
-        if (!resp3.ok) {
-          throw new Error('cannot write in paint collection');
-        }
-      }
-    } else {
-      if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
-        setFileError({
-          message: 'Please select valid image format.'
-        });
-      } else if (file) {
-        const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
-        if (size > 2) {
-          setFileError({
-            message: 'Please select image size less than 2 MB'
+    try {
+      if (file === null) {
+        if (name.length === 0) {
+          setNameError({
+            message: 'Name is required.'
+          });
+        } else if (name.length > 30) {
+          setNameError({
+            message: 'Name must be less than 30 characters.'
+          });
+        } else if (description.length > 50) {
+          setDescriptionError({
+            message: 'Description must be less than 50 characters.'
           });
         } else {
-          if (name.length === 0) {
-            setNameError({
-              message: 'Name is required.'
-            });
-          } else if (name.length > 30) {
-            setNameError({
-              message: 'Name must be less than 30 characters.'
-            });
-          } else if (description.length > 50) {
-            setDescriptionError({
-              message: 'Description must be less than 50 characters.'
+          await editOnlyPaint(
+            props.match.params.id,
+            kinveyAppKey,
+            getAuthenticationToken()
+          );
+          history.push('/mypaints');
+        }
+      } else {
+        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
+          setFileError({
+            message: 'Please select valid image format.'
+          });
+        } else if (file) {
+          const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
+          if (size > 2) {
+            setFileError({
+              message: 'Please select image size less than 2 MB'
             });
           } else {
-            const metadata = {
-              _filename: file.name,
-              mimeType: file.type,
-              _public: true
-            };
+            if (name.length === 0) {
+              setNameError({
+                message: 'Name is required.'
+              });
+            } else if (name.length > 30) {
+              setNameError({
+                message: 'Name must be less than 30 characters.'
+              });
+            } else if (description.length > 50) {
+              setDescriptionError({
+                message: 'Description must be less than 50 characters.'
+              });
+            } else {
+              const metadata = {
+                _filename: file.name,
+                mimeType: file.type,
+                _public: true
+              };
 
-            const resp1 = await createMetadata(
-              metadata,
-              kinveyAppKey,
-              getAuthenticationToken()
-            );
-            if (!resp1.ok) {
-              throw new Error('cannot write metadata');
-            }
+              const resp1 = await createMetadata(
+                metadata,
+                kinveyAppKey,
+                getAuthenticationToken(),
+                file.type
+              );
+              if (!resp1.ok) {
+                throw new Error('cannot write metadata');
+              }
 
-            const resp1json = await resp1.json();
+              const resp1json = await resp1.json();
 
-            upload(resp1json._uploadURL, {
-              ...resp1json._requiredHeaders,
-              'Content-Type': metadata.mimeType
-            });
+              upload(
+                resp1json._uploadURL,
+                {
+                  ...resp1json._requiredHeaders,
+                  'Content-Type': metadata.mimeType
+                },
+                file
+              );
 
-            const resp3 = await editPaint(
-              resp1json._id,
-              kinveyAppKey,
-              getAuthenticationToken()
-            );
-            history.push('/mypaints');
-            if (!resp3.ok) {
-              throw new Error('cannot write in paint collection');
+              await editPaint(
+                resp1json._id,
+                kinveyAppKey,
+                getAuthenticationToken()
+              );
+              history.push('/mypaints');
             }
           }
         }
       }
+    } catch (error) {
+      history.push('/error');
     }
   }
 

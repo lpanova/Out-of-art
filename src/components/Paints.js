@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Loading.css';
 import Loading from './Loading.js';
@@ -8,19 +9,24 @@ import { getPaintsData } from '../utils/api';
 import { editOnlyPaint } from '../utils/api';
 
 function Paints() {
+  let history = useHistory();
   const [paints, setPaints] = useState([]);
   const [loading, setLoading] = useState(true);
 
   async function GetPaints() {
-    const resp1 = await getPaintsData(kinveyAppKey, getAuthenticationToken());
-    if (!resp1.ok) {
-      throw new Error('cannot get paintsData');
+    try {
+      const resp1 = await getPaintsData(kinveyAppKey, getAuthenticationToken());
+      if (!resp1.ok) {
+        throw new Error('cannot get paintsData');
+      }
+
+      const resp1json = await resp1.json();
+
+      setPaints(resp1json);
+      setLoading(false);
+    } catch (error) {
+      history.push('/error');
     }
-
-    const resp1json = await resp1.json();
-
-    setPaints(resp1json);
-    setLoading(false);
   }
 
   async function sortPaintsByLikes() {

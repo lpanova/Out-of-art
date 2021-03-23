@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
 import FacebookLogin from 'react-facebook-login';
 import LoginIcon from '../login-icon.svg';
@@ -6,9 +7,8 @@ import '../App.css';
 import '../css/Form.css';
 
 function Login() {
+  let history = useHistory();
   const { login, errorInvalidUsernamePass } = useContext(userAuthContext);
-
-  const [loginFacebook, setLoginFacebook] = useState(false);
 
   const [username, setUsername] = useState({
     username: ''
@@ -51,31 +51,36 @@ function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (username.length === undefined) {
-      setUsernameError({
-        message: 'Username is required.'
-      });
-    }
-    if (password.length === undefined) {
-      setPasswordError({
-        message: 'Password is required.'
-      });
-    } else {
-      login({ username, password });
+    try {
+      if (username.length === undefined) {
+        setUsernameError({
+          message: 'Username is required.'
+        });
+      }
+      if (password.length === undefined) {
+        setPasswordError({
+          message: 'Password is required.'
+        });
+      } else {
+        login({ username, password });
+      }
+    } catch (error) {
+      history.push('/error');
     }
   }
-  const responseFacebook = (response) => {
-    let username = response.name;
-    let password = response.name;
 
-    if (response.accessToken) {
-      login({ username, password });
-      setLoginFacebook(true);
-    } else {
-      setLoginFacebook(false);
+  const responseFacebook = (response) => {
+    try {
+      let name = response.name;
+
+      if (response.accessToken) {
+        login({ username: name, password: name });
+      }
+    } catch (error) {
+      history.push('/error');
     }
   };
+
   return (
     <div>
       <div className="wrapper-form">

@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
 import FacebookLogin from 'react-facebook-login';
 import RegisterIcon from '../register-icon.svg';
@@ -6,10 +7,8 @@ import '../App.css';
 import '../css/Form.css';
 
 function Register() {
+  let history = useHistory();
   const { register, errorTakenUsername } = useContext(userAuthContext);
-
-  const [login, setLogin] = useState(false);
-
   const [username, setUsername] = useState({
     username: ''
   });
@@ -48,37 +47,40 @@ function Register() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (username.length === undefined) {
-      setUsernameError({
-        message: 'Username is required.'
-      });
-    } else if (username.length < 6) {
-      setUsernameError({
-        message: 'Username must be greater than 6 characters.'
-      });
-    } else if (password.length === undefined) {
-      setPasswordError({
-        message: 'Password is required.'
-      });
-    } else if (password.length < 6) {
-      setPasswordError({
-        message: 'Password must be greater than 6 characters.'
-      });
-    } else {
-      register({ username, password });
+    try {
+      if (username.length === undefined) {
+        setUsernameError({
+          message: 'Username is required.'
+        });
+      } else if (username.length < 6) {
+        setUsernameError({
+          message: 'Username must be greater than 6 characters.'
+        });
+      } else if (password.length === undefined) {
+        setPasswordError({
+          message: 'Password is required.'
+        });
+      } else if (password.length < 6) {
+        setPasswordError({
+          message: 'Password must be greater than 6 characters.'
+        });
+      } else {
+        register({ username, password });
+      }
+    } catch (error) {
+      history.push('/error');
     }
   }
 
   const responseFacebook = (response) => {
-    let username = response.name;
-    let password = response.name;
+    try {
+      let name = response.name;
 
-    if (response.accessToken) {
-      register({ username, password });
-      setLogin(true);
-    } else {
-      setLogin(false);
+      if (response.accessToken) {
+        register({ username: name, password: name });
+      }
+    } catch (error) {
+      history.push('/error');
     }
   };
 
@@ -129,7 +131,7 @@ function Register() {
                   {
                     <FacebookLogin
                       appId="1968952269913927"
-                      fields="name,email,picture"
+                      fields="name,email"
                       scope="public_profile,user_friends"
                       callback={responseFacebook}
                       icon="fa-facebook"

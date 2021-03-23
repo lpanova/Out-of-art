@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Loading.css';
 import Loading from './Loading.js';
@@ -7,6 +8,7 @@ import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
 import { getMyPaintsData, editOnlyPaint } from '../utils/api';
 
 function MyPaints() {
+  let history = useHistory();
   const [myPaints, setMyPaints] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,33 +16,29 @@ function MyPaints() {
   const endpoint = `?query={"_acl.creator":"${user}"}`;
 
   async function GetMyPaints() {
-    const resp1 = await getMyPaintsData(
-      kinveyAppKey,
-      getAuthenticationToken(),
-      endpoint
-    );
-    if (!resp1.ok) {
-      throw new Error('cannot get paintsData');
-    }
+    try {
+      const resp1 = await getMyPaintsData(
+        kinveyAppKey,
+        getAuthenticationToken(),
+        endpoint
+      );
 
-    const resp1json = await resp1.json();
-    console.log(resp1json);
-    setMyPaints(resp1json);
-    setLoading(false);
+      const resp1json = await resp1.json();
+
+      setMyPaints(resp1json);
+      setLoading(false);
+    } catch (error) {
+      history.push('/error');
+    }
   }
 
   async function updateLike(data) {
-    const resp1 = await editOnlyPaint(
-      kinveyAppKey,
-      getAuthenticationToken(),
-      data
-    );
-
-    if (!resp1.ok) {
-      throw new Error('cannot write in paint collection');
+    try {
+      await editOnlyPaint(kinveyAppKey, getAuthenticationToken(), data);
+      await GetMyPaints(kinveyAppKey, getAuthenticationToken());
+    } catch (error) {
+      history.push('/error');
     }
-
-    await GetMyPaints(kinveyAppKey, getAuthenticationToken());
   }
 
   useEffect(() => {

@@ -1,0 +1,81 @@
+
+.wraper-error{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  color: fff;
+  background-color: white;
+  background-image: url('background-grey.png');
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+}
+
+
+.wraper-error >div>div> a{
+  width: 15em;
+  display: inline-block;
+  margin: 1em 0em 0.3em 0em;
+  background: #3f51b5;
+  color: white;
+  border: none;
+  padding: 1em;
+  font-weight: 2em;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  border-radius: 70px;
+  font-size: 18px;
+
+}
+
+.wraper-error >div>div> a:hover {
+  cursor: pointer;
+  background-color: #363636;
+  color:#cddc39;
+}
+
+.wraper-error >div>div> a:focus {
+  outline: none;
+}
+
+.error {
+  text-align: center;
+  font-size: 1.8em;
+  color:#963735;
+  font-weight: bold;
+
+}
+
+.wraper-error > div > div> img{
+width: 400px;
+}
+
+@media (max-width: 812px) {
+  .wraper-error > div > div>img {
+      width: 70%;
+    }
+  }
+  
+  @media (max-width: 812px) {
+    .error {
+      font-size: 1em;
+   
+      }
+    }
+@media (max-width: 812px) and (min-width: 460) {
+    .wraper-error {
+        align-items: baseline;
+     
+      }
+  }
+
+@media (max-width: 812px) {
+  .wraper-error >div>div> a {
+    width: 10em;
+          font-size: 1em;
+       
+      }
+  }
