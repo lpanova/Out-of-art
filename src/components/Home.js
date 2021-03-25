@@ -7,6 +7,7 @@ function Home() {
     <div className="wrapper-home-background">
       <div className="wrapper-home">
         <h3 className="text-home">Out of ART for everyone.</h3>
+        <hr className="hr" />
         <h5>
           Share your paintings and look at the paintings of other authors.
         </h5>

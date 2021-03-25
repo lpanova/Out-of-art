@@ -2,12 +2,16 @@ import React, { useContext } from 'react';
 import '../../css/Navigation.css';
 import { NavLink } from 'react-router-dom';
 import { userAuthContext } from '../../context/UserAuthentication';
+import OutOfArt from '../../OutOfArt.svg';
 
 function NavigationLogged() {
   const { userAuth, logout } = useContext(userAuthContext);
   return (
     <div className="navbar flex-between">
       <div className="navbar-left">
+        <div>
+          <img src={OutOfArt} alt="logoadasdas" />
+        </div>
         <NavLink to="/home"> Home</NavLink>
         <NavLink to="/paints"> Paintings</NavLink>
         <NavLink to="/mypaints"> My Paintings</NavLink>
