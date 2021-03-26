@@ -120,9 +120,9 @@ function Register() {
                   />
                   <p className="error-message">{passwordError.message}</p>
                 </div>
-                <input type="submit" value="Register" className="form-button" />
+                <input type="submit" value="REGISTER" className="form-button" />
               </form>
-              <div className="flex-x-center">
+              <div className="flex-x-center wrapper-facebook">
                 <div>
                   <p className="text-center">Or register with Facebook</p>
                   <p className="error-message text-center">

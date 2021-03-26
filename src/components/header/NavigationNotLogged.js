@@ -5,18 +5,22 @@ import OutOfArt from '../../OutOfArt.svg';
 
 function NavigationNotLogged() {
   return (
-    <div className="navbar">
-      <div>
-        <img src={OutOfArt} alt="logoadasdas" />
+    <div className="navbar flex-between">
+      <div className="navbar-left">
+        <div>
+          <img src={OutOfArt} alt="logo" />
+        </div>
+        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/paints">Paintings</NavLink>
       </div>
-      <NavLink to="/home">Home</NavLink>
-      <NavLink to="/paints">Paintings</NavLink>
-      <NavLink to="/login" className="right">
-        Login
-      </NavLink>
-      <NavLink to="/register" className="right">
-        Register
-      </NavLink>
+      <div className="navbar-right">
+        <NavLink to="/login" className="right">
+          Login
+        </NavLink>
+        <NavLink to="/register" className="right">
+          Register
+        </NavLink>
+      </div>
     </div>
   );
 }

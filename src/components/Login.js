@@ -118,10 +118,9 @@ function Login() {
                 />
                 <p className="error-message">{passwordError.message}</p>
               </div>
-              <input type="submit" value="Login" className="form-button" />
+              <input type="submit" value="LOGIN" className="form-button" />
             </form>
-
-            <div className="flex-x-center">
+            <div className="flex-x-center wrapper-facebook">
               <div>
                 <p className="text-center">Or login with Facebook</p>
                 {/* <p className="error-message">

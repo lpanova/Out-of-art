@@ -255,8 +255,8 @@ function EditPaint(props) {
           <div>
             <h3 className="text-center">Edit Painting</h3>
           </div>
-          <div className=" flex-x-center">
-            <form className="form" onSubmit={handleSubmit}>
+          <div className="form">
+            <form onSubmit={handleSubmit}>
               <div className="flex-x-center">
                 <div className="wrapper-input" onClick={clearFileError}>
                   <div className="text-center m1">Upload file:</div>
@@ -298,7 +298,7 @@ function EditPaint(props) {
                 <p className="error-message">{descriptionError.message}</p>
               </div>
 
-              <input type="submit" value="Submit" className="form-button" />
+              <input type="submit" value="SUBMIT" className="form-button" />
             </form>
           </div>
         </div>

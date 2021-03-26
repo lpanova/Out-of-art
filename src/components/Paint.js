@@ -11,11 +11,6 @@ function Paint({ item, updateLike }) {
   const isLiked = item.likes.indexOf(username) !== -1;
   console.log(item, updateLike);
 
-  // let image = false;
-  // if (item.fileImage._downloadURL) {
-  //   image = true;
-  // }
-
   let likesNumber = item.likes.length - 1;
 
   async function HandleClick() {
@@ -39,6 +34,7 @@ function Paint({ item, updateLike }) {
               className="paint-img"
               alt="paint"
             />
+            <div className="img-text">View Details</div>
           </div>
           <div>
             <div className="text-details">

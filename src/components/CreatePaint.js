@@ -161,48 +161,49 @@ function CreatePaint() {
           <div className="text-center">
             <h3>Create Painting</h3>
           </div>
-
-          <form className="form" onSubmit={handleSubmit}>
-            <div className="flex-x-center">
-              <div className="wrapper-input" onClick={clearFileError}>
-                <div className="text-center m1">Upload file:</div>
-                <input
-                  type="file"
-                  name="file"
-                  onChange={handleFileChange}
-                  ref={inputFileFocus}
-                  className="formelement wrapper-input"
-                />
-                <p className="error-message">{fileError.message}</p>
+          <div className="form">
+            <form onSubmit={handleSubmit}>
+              <div className="flex-x-center">
+                <div className="wrapper-input" onClick={clearFileError}>
+                  <div className="text-center m1">Upload file:</div>
+                  <input
+                    type="file"
+                    name="file"
+                    onChange={handleFileChange}
+                    ref={inputFileFocus}
+                    className="formelement wrapper-input"
+                  />
+                  <p className="error-message">{fileError.message}</p>
+                </div>
               </div>
-            </div>
 
-            <div onClick={clearNameError}>
-              <div>Name:</div>
-              <input
-                type="text"
-                name="name"
-                onChange={handleNameChange}
-                ref={inputNameFocus}
-                className="form-input"
-              />
-              <p className="error-message">{nameError.message}</p>
-            </div>
-            <div onClick={clearDescriptionError}>
-              <div>Description:</div>
-              <textarea
-                type="text"
-                name="description"
-                onChange={handleDescChange}
-                rows="6"
-                ref={inputDescriptionFocus}
-                className="form-input"
-              />
-              <p className="error-message">{descriptionError.message}</p>
-            </div>
+              <div onClick={clearNameError}>
+                <div>Name:</div>
+                <input
+                  type="text"
+                  name="name"
+                  onChange={handleNameChange}
+                  ref={inputNameFocus}
+                  className="form-input"
+                />
+                <p className="error-message">{nameError.message}</p>
+              </div>
+              <div onClick={clearDescriptionError}>
+                <div>Description:</div>
+                <textarea
+                  type="text"
+                  name="description"
+                  onChange={handleDescChange}
+                  rows="6"
+                  ref={inputDescriptionFocus}
+                  className="form-input"
+                />
+                <p className="error-message">{descriptionError.message}</p>
+              </div>
 
-            <input type="submit" value="Submit" className="form-button " />
-          </form>
+              <input type="submit" value="SUBMIT" className="form-button " />
+            </form>
+          </div>
         </div>
       </div>
     </div>
