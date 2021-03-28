@@ -39,7 +39,6 @@ function UserAuthentication(props) {
         return response.json();
       })
       .then(function (data) {
-        // console.log(data.description);
         if (data.error) {
           setErrorUsername({
             message: data.description
@@ -48,6 +47,9 @@ function UserAuthentication(props) {
           const { username } = data;
           setUserAuth({
             username: username
+          });
+          setErrorUsername({
+            message: ''
           });
           console.log(username);
           localStorage.setItem('username', JSON.stringify(username));
@@ -86,6 +88,9 @@ function UserAuthentication(props) {
           const { username } = data;
           setUserAuth({
             username: username
+          });
+          setErrorInvalidUsernamePass({
+            message: ''
           });
           console.log(username);
           localStorage.setItem('username', JSON.stringify(username));

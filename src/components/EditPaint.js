@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
 import { getPaint, createMetadata, upload } from '../utils/api';
+import editValidation from '../utils/editValidation';
 import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Form.css';
@@ -31,17 +32,11 @@ function EditPaint(props) {
 
   const id = props.match.params.id;
 
-  const [fileError, setFileError] = useState({
-    message: ''
-  });
+  const [fileError, setFileError] = useState('');
 
-  const [nameError, setNameError] = useState({
-    message: ''
-  });
+  const [nameError, setNameError] = useState('');
 
-  const [descriptionError, setDescriptionError] = useState({
-    message: ''
-  });
+  const [descriptionError, setDescriptionError] = useState('');
 
   const inputFileFocus = useRef(null);
   const inputNameFocus = useRef(null);
@@ -49,23 +44,17 @@ function EditPaint(props) {
 
   function clearFileError() {
     inputFileFocus.current.focus();
-    setFileError({
-      message: ''
-    });
+    setFileError('');
   }
 
   function clearNameError() {
     inputNameFocus.current.focus();
-    setNameError({
-      message: ''
-    });
+    setNameError('');
   }
 
   function clearDescriptionError() {
     inputDescriptionFocus.current.focus();
-    setDescriptionError({
-      message: ''
-    });
+    setDescriptionError('');
   }
 
   async function getPaintInfo() {
@@ -160,88 +149,49 @@ function EditPaint(props) {
     event.preventDefault();
 
     try {
-      if (file === null) {
-        if (name.length === 0) {
-          setNameError({
-            message: 'Name is required.'
-          });
-        } else if (name.length > 30) {
-          setNameError({
-            message: 'Name must be less than 30 characters.'
-          });
-        } else if (description.length > 50) {
-          setDescriptionError({
-            message: 'Description must be less than 50 characters.'
-          });
-        } else {
-          await editOnlyPaint(
-            props.match.params.id,
-            kinveyAppKey,
-            getAuthenticationToken()
-          );
-          history.push('/mypaints');
+      let validationObject = editValidation(file, name, description);
+
+      if (!file && validationObject.isValid) {
+        await editOnlyPaint(
+          props.match.params.id,
+          kinveyAppKey,
+          getAuthenticationToken()
+        );
+        history.push('/mypaints');
+      } else if (file && validationObject.isValid) {
+        const metadata = {
+          _filename: file.name,
+          mimeType: file.type,
+          _public: true
+        };
+
+        const resp1 = await createMetadata(
+          metadata,
+          kinveyAppKey,
+          getAuthenticationToken(),
+          file.type
+        );
+        if (!resp1.ok) {
+          throw new Error('cannot write metadata');
         }
+
+        const resp1json = await resp1.json();
+
+        upload(
+          resp1json._uploadURL,
+          {
+            ...resp1json._requiredHeaders,
+            'Content-Type': metadata.mimeType
+          },
+          file
+        );
+
+        await editPaint(resp1json._id, kinveyAppKey, getAuthenticationToken());
+        history.push('/mypaints');
       } else {
-        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
-          setFileError({
-            message: 'Please select valid image format.'
-          });
-        } else if (file) {
-          const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
-          if (size > 2) {
-            setFileError({
-              message: 'Please select image size less than 2 MB'
-            });
-          } else {
-            if (name.length === 0) {
-              setNameError({
-                message: 'Name is required.'
-              });
-            } else if (name.length > 30) {
-              setNameError({
-                message: 'Name must be less than 30 characters.'
-              });
-            } else if (description.length > 50) {
-              setDescriptionError({
-                message: 'Description must be less than 50 characters.'
-              });
-            } else {
-              const metadata = {
-                _filename: file.name,
-                mimeType: file.type,
-                _public: true
-              };
-
-              const resp1 = await createMetadata(
-                metadata,
-                kinveyAppKey,
-                getAuthenticationToken(),
-                file.type
-              );
-              if (!resp1.ok) {
-                throw new Error('cannot write metadata');
-              }
-
-              const resp1json = await resp1.json();
-
-              upload(
-                resp1json._uploadURL,
-                {
-                  ...resp1json._requiredHeaders,
-                  'Content-Type': metadata.mimeType
-                },
-                file
-              );
-
-              await editPaint(
-                resp1json._id,
-                kinveyAppKey,
-                getAuthenticationToken()
-              );
-              history.push('/mypaints');
-            }
-          }
-        }
+        setFileError(validationObject.msgFile);
+        setNameError(validationObject.msgName);
+        setDescriptionError(validationObject.msgDescription);
       }
     } catch (error) {
       history.push('/error');
@@ -268,7 +218,7 @@ function EditPaint(props) {
                     onChange={handleFileChange}
                     ref={inputFileFocus}
                   />
-                  <p className="error-message">{fileError.message}</p>
+                  <p className="error-message">{fileError}</p>
                 </div>
               </div>
               <div onClick={clearNameError}>
@@ -281,7 +231,7 @@ function EditPaint(props) {
                   onChange={handleNameChange}
                   ref={inputNameFocus}
                 />
-                <p className="error-message">{nameError.message}</p>
+                <p className="error-message">{nameError}</p>
               </div>
 
               <div onClick={clearDescriptionError}>
@@ -295,7 +245,7 @@ function EditPaint(props) {
                   onChange={handleDescChange}
                   ref={inputDescriptionFocus}
                 />
-                <p className="error-message">{descriptionError.message}</p>
+                <p className="error-message">{descriptionError}</p>
               </div>
 
               <input type="submit" value="SUBMIT" className="form-button" />

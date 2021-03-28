@@ -1,5 +1,5 @@
 import './App.css';
-import AppRouter from './AppRouter';
+import AppRouter from './components/AppRouter';
 import UserAuthentication from './context/UserAuthentication';
 import Header from './components/header/Header';
 import Footer from './components/Footer';

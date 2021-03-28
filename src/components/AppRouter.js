@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
-import Home from './components/Home';
-import Paints from './components/Paints';
+import Home from './Home';
+import Paints from './Paints';
 
-import Login from './components/Login';
-import Register from './components/Register';
-import CreatePaint from './components/CreatePaint';
-import MyPaints from './components/MyPaints';
-import PaintDetails from './components/PaintDetails';
-import EditPaint from './components/EditPaint';
-import Error from './components/Error';
-import { userAuthContext } from './context/UserAuthentication';
+import Login from './Login';
+import Register from './Register';
+import CreatePaint from './CreatePaint';
+import MyPaints from './MyPaints';
+import PaintDetails from './PaintDetails';
+import EditPaint from './EditPaint';
+import Error from './Error';
+import { userAuthContext } from '../context/UserAuthentication';
 import ErrorBoundary from './ErrorBoundary';
-import NotFound from './components/NotFound';
+import NotFound from './NotFound';
 
 function AppRouter(props) {
   let location = useLocation();

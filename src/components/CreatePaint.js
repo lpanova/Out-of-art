@@ -3,6 +3,7 @@ import '../App.css';
 import '../css/Form.css';
 import { getAuthenticationToken, kinveyAppKey } from '../utils/kinvey';
 import { createMetadata, upload } from '../utils/api';
+import createValidation from '../utils/createValidation';
 import { useHistory } from 'react-router-dom';
 
 function CreatePaint() {
@@ -13,17 +14,11 @@ function CreatePaint() {
   const author = localStorage.getItem('username');
   const [likes] = useState(['like']);
 
-  const [fileError, setFileError] = useState({
-    message: ''
-  });
+  const [fileError, setFileError] = useState('');
 
-  const [nameError, setNameError] = useState({
-    message: ''
-  });
+  const [nameError, setNameError] = useState('');
 
-  const [descriptionError, setDescriptionError] = useState({
-    message: ''
-  });
+  const [descriptionError, setDescriptionError] = useState('');
 
   const inputFileFocus = useRef(null);
   const inputNameFocus = useRef(null);
@@ -31,23 +26,15 @@ function CreatePaint() {
 
   function clearFileError() {
     inputFileFocus.current.focus();
-    setFileError({
-      message: ''
-    });
+    setFileError('');
   }
-
   function clearNameError() {
     inputNameFocus.current.focus();
-    setNameError({
-      message: ''
-    });
+    setNameError('');
   }
-
   function clearDescriptionError() {
     inputDescriptionFocus.current.focus();
-    setDescriptionError({
-      message: ''
-    });
+    setDescriptionError('');
   }
 
   function handleFileChange(event) {
@@ -85,69 +72,43 @@ function CreatePaint() {
     event.preventDefault();
 
     try {
-      if (!file) {
-        setFileError({
-          message: 'Please select image.'
-        });
-      } else if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
-        setFileError({
-          message: 'Please select valid image format.'
-        });
-      } else if (file) {
-        const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);
-        if (size > 2) {
-          setFileError({
-            message: 'Please select image size less than 2 MB'
-          });
-        } else {
-          if (name.length === 0) {
-            setNameError({
-              message: 'Name is required.'
-            });
-          } else if (name.length > 30) {
-            setNameError({
-              message: 'Name must be less than 30 characters.'
-            });
-          } else if (description.length > 50) {
-            setDescriptionError({
-              message: 'Description must be less than 50 characters.'
-            });
-          } else {
-            const metadata = {
-              _filename: file.name,
-              mimeType: file.type,
-              _public: true
-            };
+      let validationObject = createValidation(file, name, description);
 
-            const resp1 = await createMetadata(
-              metadata,
-              kinveyAppKey,
-              getAuthenticationToken(),
-              file.type
-            );
+      if (validationObject.isValid) {
+        const metadata = {
+          _filename: file.name,
+          mimeType: file.type,
+          _public: true
+        };
 
-            const resp1json = await resp1.json();
+        const resp1 = await createMetadata(
+          metadata,
+          kinveyAppKey,
+          getAuthenticationToken(),
+          file.type
+        );
 
-            upload(
-              resp1json._uploadURL,
-              {
-                ...resp1json._requiredHeaders,
-                'Content-Type': metadata.mimeType
-              },
-              file
-            );
+        const resp1json = await resp1.json();
 
-            await createPaint(
-              resp1json._id,
-              kinveyAppKey,
-              getAuthenticationToken()
-            );
-            history.push('/mypaints');
-            // if (!resp3.ok) {
-            //   throw new Error('cannot write in paint collection');
-            // }
-          }
-        }
+        upload(
+          resp1json._uploadURL,
+          {
+            ...resp1json._requiredHeaders,
+            'Content-Type': metadata.mimeType
+          },
+          file
+        );
+
+        await createPaint(
+          resp1json._id,
+          kinveyAppKey,
+          getAuthenticationToken()
+        );
+        history.push('/mypaints');
+      } else {
+        setFileError(validationObject.msgFile);
+        setNameError(validationObject.msgName);
+        setDescriptionError(validationObject.msgDescription);
       }
     } catch (error) {
       history.push('/error');
@@ -173,7 +134,7 @@ function CreatePaint() {
                     ref={inputFileFocus}
                     className="formelement wrapper-input"
                   />
-                  <p className="error-message">{fileError.message}</p>
+                  <p className="error-message">{fileError}</p>
                 </div>
               </div>
 
@@ -186,7 +147,7 @@ function CreatePaint() {
                   ref={inputNameFocus}
                   className="form-input"
                 />
-                <p className="error-message">{nameError.message}</p>
+                <p className="error-message">{nameError}</p>
               </div>
               <div onClick={clearDescriptionError}>
                 <div>Description:</div>
@@ -198,7 +159,7 @@ function CreatePaint() {
                   ref={inputDescriptionFocus}
                   className="form-input"
                 />
-                <p className="error-message">{descriptionError.message}</p>
+                <p className="error-message">{descriptionError}</p>
               </div>
 
               <input type="submit" value="SUBMIT" className="form-button " />

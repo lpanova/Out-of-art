@@ -85,7 +85,7 @@
     margin-top:0.5em
   }
 
-  .form input[type="text" ], textarea{
+  .form input[type="text" ],input[type="password" ],  textarea{
     width: 100%;
     background: transparent;
     border: none;
@@ -97,7 +97,7 @@
   }
   
   
-  form input[type="text" ], textarea:focus {
+  form input[type="text" ],input[type="password" ], textarea:focus {
     outline: none;
   }
 

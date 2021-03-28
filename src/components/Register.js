@@ -3,40 +3,30 @@ import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
 import FacebookLogin from 'react-facebook-login';
 import RegisterIcon from '../register-icon.svg';
+import RegisterValidation from '../utils/registerValidation';
 import '../App.css';
 import '../css/Form.css';
 
 function Register() {
   let history = useHistory();
   const { register, errorTakenUsername } = useContext(userAuthContext);
-  const [username, setUsername] = useState({
-    username: ''
-  });
-  const [password, setPassword] = useState({
-    password: ''
-  });
-  const [usernameError, setUsernameError] = useState({
-    message: ''
-  });
-  const [passwordError, setPasswordError] = useState({
-    message: ''
-  });
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const inputNameFocus = useRef(null);
   const inputPassFocus = useRef(null);
 
   function clearNameError() {
     inputNameFocus.current.focus();
-    setUsernameError({
-      message: ''
-    });
+    setUsernameError('');
     errorTakenUsername.message = '';
   }
   function clearPassError() {
     inputPassFocus.current.focus();
-    setPasswordError({
-      message: ''
-    });
+    setPasswordError('');
   }
   function handleUsernameChange(event) {
     setUsername(event.target.value);
@@ -48,24 +38,13 @@ function Register() {
   function handleSubmit(e) {
     e.preventDefault();
     try {
-      if (username.length === undefined) {
-        setUsernameError({
-          message: 'Username is required.'
-        });
-      } else if (username.length < 6) {
-        setUsernameError({
-          message: 'Username must be greater than 6 characters.'
-        });
-      } else if (password.length === undefined) {
-        setPasswordError({
-          message: 'Password is required.'
-        });
-      } else if (password.length < 6) {
-        setPasswordError({
-          message: 'Password must be greater than 6 characters.'
-        });
-      } else {
+      const validationObject = RegisterValidation(username, password);
+
+      if (validationObject.isValid) {
         register({ username, password });
+      } else {
+        setUsernameError(validationObject.msgUsername);
+        setPasswordError(validationObject.msgPassword);
       }
     } catch (error) {
       history.push('/error');
@@ -106,19 +85,19 @@ function Register() {
                     className="form-input"
                     ref={inputNameFocus}
                   />
-                  <p className="error-message">{usernameError.message}</p>
+                  <p className="error-message">{usernameError}</p>
                 </div>
 
                 <div onClick={clearPassError}>
                   <div>Password</div>
                   <input
                     onChange={handlePasswordChange}
-                    type="text"
+                    type="password"
                     name="password"
                     className="form-input"
                     ref={inputPassFocus}
                   />
-                  <p className="error-message">{passwordError.message}</p>
+                  <p className="error-message">{passwordError}</p>
                 </div>
                 <input type="submit" value="REGISTER" className="form-button" />
               </form>

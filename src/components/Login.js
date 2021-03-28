@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
+import LoginValidation from '../utils/loginValidation';
 import FacebookLogin from 'react-facebook-login';
 import LoginIcon from '../login-icon.svg';
 import '../App.css';
@@ -10,12 +11,8 @@ function Login() {
   let history = useHistory();
   const { login, errorInvalidUsernamePass } = useContext(userAuthContext);
 
-  const [username, setUsername] = useState({
-    username: ''
-  });
-  const [password, setPassword] = useState({
-    password: ''
-  });
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const [usernameError, setUsernameError] = useState({
     message: ''
@@ -52,17 +49,18 @@ function Login() {
   function handleSubmit(e) {
     e.preventDefault();
     try {
-      if (username.length === undefined) {
-        setUsernameError({
-          message: 'Username is required.'
-        });
-      }
-      if (password.length === undefined) {
-        setPasswordError({
-          message: 'Password is required.'
-        });
-      } else {
+      const validationObject = LoginValidation(username, password);
+
+      if (validationObject.isValid) {
         login({ username, password });
+      } else {
+        setPasswordError({
+          message: validationObject.msgPassword
+        });
+
+        setUsernameError({
+          message: validationObject.msgUsername
+        });
       }
     } catch (error) {
       history.push('/error');
@@ -112,7 +110,7 @@ function Login() {
                 <label>Password</label>
                 <input
                   onChange={handlePasswordChange}
-                  type="text"
+                  type="password"
                   name="password"
                   ref={inputPassFocus}
                 />
