@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
 import LoginValidation from '../utils/loginValidation';
@@ -121,9 +122,7 @@ function Login() {
             <div className="flex-x-center wrapper-facebook">
               <div>
                 <p className="text-center">Or login with Facebook</p>
-                {/* <p className="error-message">
-                  {errorInvalidUsernamePass.message}
-                </p> */}
+
                 {
                   <FacebookLogin
                     appId="1968952269913927"
@@ -134,6 +133,11 @@ function Login() {
                   />
                 }
               </div>
+            </div>
+            <div className="text-center wrapper-facebook">
+              <p>Don't have account?</p>
+
+              <Link to={`/register`}>Register now</Link>
             </div>
           </div>
         </div>

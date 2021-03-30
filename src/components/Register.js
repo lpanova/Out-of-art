@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { userAuthContext } from '../context/UserAuthentication';
 import FacebookLogin from 'react-facebook-login';
@@ -117,6 +118,11 @@ function Register() {
                     />
                   }
                 </div>
+              </div>
+              <div className="text-center wrapper-facebook">
+                <p>Already have account?</p>
+
+                <Link to={`/login`}>Login now</Link>
               </div>
             </div>
           </div>
