@@ -6,11 +6,11 @@ export default function editValidation(file, name, description) {
     msgDescription: ''
   };
 
-  if (file && !file.name.match(/\.(jpg|jpeg|png)$/)) {
+  if (file && !file.name.match(/\.(jpg|jpeg|png)$/i)) {
     validationObject = {
       ...validationObject,
       isValid: false,
-      msgFile: 'Please select valid image format: jpg, jepg or png.'
+      msgFile: 'Please select valid image format: jpg, jpeg or png.'
     };
   } else if (file) {
     const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);

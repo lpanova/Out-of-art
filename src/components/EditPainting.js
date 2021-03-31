@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import '../App.css';
 import '../css/Form.css';
 
-function EditPaint(props) {
+function EditPainting(props) {
   let history = useHistory();
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
@@ -157,7 +157,7 @@ function EditPaint(props) {
           kinveyAppKey,
           getAuthenticationToken()
         );
-        history.push('/mypaints');
+        history.push('/mypaintings');
       } else if (file && validationObject.isValid) {
         const metadata = {
           _filename: file.name,
@@ -187,7 +187,7 @@ function EditPaint(props) {
         );
 
         await editPaint(resp1json._id, kinveyAppKey, getAuthenticationToken());
-        history.push('/mypaints');
+        history.push('/mypaintings');
       } else {
         setFileError(validationObject.msgFile);
         setNameError(validationObject.msgName);
@@ -257,4 +257,4 @@ function EditPaint(props) {
   );
 }
 
-export default EditPaint;
+export default EditPainting;

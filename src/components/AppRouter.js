@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import Home from './Home';
-import Paints from './Paints';
-
+import Paintings from './Paintings';
 import Login from './Login';
 import Register from './Register';
-import CreatePaint from './CreatePaint';
-import MyPaints from './MyPaints';
-import PaintDetails from './PaintDetails';
-import EditPaint from './EditPaint';
+import CreatePainting from './CreatePainting';
+import MyPaintings from './MyPaintings';
+import PaintingDetails from './PaintingDetails';
+import EditPainting from './EditPainting';
 import Error from './Error';
 import { userAuthContext } from '../context/UserAuthentication';
 import ErrorBoundary from './ErrorBoundary';
@@ -23,23 +22,23 @@ function AppRouter(props) {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/home" component={Home} />
-          <Route exact path="/paints" component={Paints} />
+          <Route exact path="/paintings" component={Paintings} />
           <Route
             exact
-            path="/mypaints"
+            path="/mypaintings"
             render={() =>
-              userAuth.username ? <MyPaints /> : <Redirect to="/login" />
+              userAuth.username ? <MyPaintings /> : <Redirect to="/login" />
             }
           />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/details/:id" component={PaintDetails} />
-          <Route exact path="/edit/:id" component={EditPaint} />
+          <Route exact path="/details/:id" component={PaintingDetails} />
+          <Route exact path="/edit/:id" component={EditPainting} />
           <Route
             exact
             path="/create"
             render={() =>
-              userAuth.username ? <CreatePaint /> : <Redirect to="/login" />
+              userAuth.username ? <CreatePainting /> : <Redirect to="/login" />
             }
           />
           <Route path="/error" component={Error} />

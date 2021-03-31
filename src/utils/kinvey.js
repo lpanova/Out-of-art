@@ -1,6 +1,7 @@
-export const kinveyAppKey = 'kid_r1TUwwlHd';
+export const kinveyAppKey = 'kid_HyHElsgSu';
 
-const masterSecret = '920600d667644e4381277851e4312d88';
+const masterSecret = 'da8fcffe59924566ac43c547591d5344';
+const kinveyAppSecret = '7327b1c4e76a49b1826de3397f68434e';
 
 export function getAuthenticationToken() {
   return localStorage.getItem('authtoken')
@@ -8,5 +9,4 @@ export function getAuthenticationToken() {
     : 'Basic ' + btoa(kinveyAppKey + ':' + masterSecret);
 }
 
-const kinveyAppSecret = '1d3c45cbc03a43ac835d6d0993c0de2c';
 export const basicAuth = 'Basic ' + btoa(kinveyAppKey + ':' + kinveyAppSecret);

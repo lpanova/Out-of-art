@@ -13,7 +13,7 @@ import {
 } from '../utils/api';
 import { userAuthContext } from '../context/UserAuthentication';
 
-function PaintDetails(props) {
+function PaintingDetails(props) {
   const history = useHistory();
 
   const { userAuth } = useContext(userAuthContext);
@@ -75,7 +75,7 @@ function PaintDetails(props) {
 
       await deletePaint(kinveyAppKey, getAuthenticationToken(), id);
 
-      history.push('/paints');
+      history.push('/mypaintings');
       console.log('success');
     } catch (error) {
       history.push('/error');
@@ -154,4 +154,4 @@ function PaintDetails(props) {
   );
 }
 
-export default PaintDetails;
+export default PaintingDetails;

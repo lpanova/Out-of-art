@@ -8,7 +8,7 @@ import { kinveyAppKey, getAuthenticationToken } from '../utils/kinvey';
 import { getPaintsData } from '../utils/api';
 import { editOnlyPaint } from '../utils/api';
 
-function Paints() {
+function Paintings() {
   let history = useHistory();
   const [paints, setPaints] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,4 +109,4 @@ function Paints() {
   );
 }
 
-export default Paints;
+export default Paintings;

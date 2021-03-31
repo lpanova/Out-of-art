@@ -11,7 +11,7 @@ function NavigationNotLogged() {
           <img src={OutOfArt} alt="logo" />
         </div>
         <NavLink to="/home">Home</NavLink>
-        <NavLink to="/paints">Paintings</NavLink>
+        <NavLink to="/paintings">Paintings</NavLink>
       </div>
       <div className="navbar-right">
         <NavLink to="/login" className="right">

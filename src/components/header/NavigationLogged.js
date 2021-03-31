@@ -13,8 +13,8 @@ function NavigationLogged() {
           <img src={OutOfArt} alt="logoadasdas" />
         </div>
         <NavLink to="/home"> Home</NavLink>
-        <NavLink to="/paints"> Paintings</NavLink>
-        <NavLink to="/mypaints"> My Paintings</NavLink>
+        <NavLink to="/paintings"> Paintings</NavLink>
+        <NavLink to="/mypaintings"> My Paintings</NavLink>
         <NavLink to="/create"> Create Painting</NavLink>
       </div>
       <div className="navbar-right">

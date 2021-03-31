@@ -16,7 +16,7 @@ export default function createValidation(file, name, description) {
     validationObject = {
       ...validationObject,
       isValid: false,
-      msgFile: 'Please select valid image format: jpg, jepg or png.'
+      msgFile: 'Please select valid image format: jpg, jpeg or png.'
     };
   } else if (file) {
     const size = parseFloat(file.size / (1024 * 1024)).toFixed(2);

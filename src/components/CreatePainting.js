@@ -6,7 +6,7 @@ import { createMetadata, upload } from '../utils/api';
 import createValidation from '../utils/createValidation';
 import { useHistory } from 'react-router-dom';
 
-function CreatePaint() {
+function CreatePainting() {
   let history = useHistory();
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
@@ -104,7 +104,7 @@ function CreatePaint() {
           kinveyAppKey,
           getAuthenticationToken()
         );
-        history.push('/mypaints');
+        history.push('/mypaintings');
       } else {
         setFileError(validationObject.msgFile);
         setNameError(validationObject.msgName);
@@ -171,4 +171,4 @@ function CreatePaint() {
   );
 }
 
-export default CreatePaint;
+export default CreatePainting;
